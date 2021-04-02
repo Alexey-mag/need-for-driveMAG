@@ -15,12 +15,12 @@
         <p class="slider__description">
           {{ slide.desc }}
         </p>
-        <button
+        <div
           class="slider__button"
           :style="slide.background"
         >
           {{ slide.buttonText }}
-        </button>
+        </div>
       </div>
     </slider-item>
     <div :class="{slider__overlay: getBurgerStatus}" />
@@ -115,7 +115,7 @@ export default {
       font-weight: 300;
       font-size: 24px;
       line-height: 22px;
-      color: $light-gray;
+      color: $main-light-gray;
       margin-top: 8px;
     }
     .slider__title {
@@ -139,7 +139,13 @@ export default {
     align-items: center;
     justify-content: center;
     text-align: center;
-    color: #EEEEEE;
+    color: $main-light-gray;
     cursor: pointer !important;
   }
+    .slider__button:hover {
+      filter: brightness(0.9);
+    }
+    .slider__button:active {
+      filter: brightness(0.8);
+    }
 </style>
