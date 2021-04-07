@@ -1,58 +1,29 @@
 <template>
-    <v-container>
-        <v-carousel>
-            <v-carousel-item
-                    v-for="picture in pictures"
-                    :key="picture"
-            >
-                <v-img :src="'/images/'+picture">
-                    <v-row
-                            class="fill-height"
-                            align="center"
-                            justify="center"
-                    >
-                        <div class="display-3">
-                            Бензин
-                        </div>
-                    </v-row>
-                </v-img>
-            </v-carousel-item>
-        </v-carousel>
-    </v-container>
+  <div class="home__container">
+    <MainPage />
+    <SliderVue />
+  </div>
 </template>
 
 <script>
-    export default {
-        data: () => ({
-            slider:[
-                {
-                    id:1,
-                    img:'Back1.jpg',
-                    title:'Бензин',
-                    subtitle:'bla bla bla',
-                    btn:{
-                        text:"",
-                        cssGradient:''
-                    }
-                }
-            ],
-            pictures: [
-                'Back1.jpg',
-                'Back2.jpg',
-                'Back3.jpg',
-                'Back4.jpg',
-                'Back1.jpg',
-                'Back2.jpg',
-                'Back3.jpg',
-                'Back4.jpg',
-            ],
-        }),
-    }
+import MainPage from '@/components/MainPage'
+import SliderVue from '@/components/SliderVue';
+
+export default {
+    components: {
+        MainPage,
+        SliderVue
+    },
+    data: () => ({
+
+    })
+}
 </script>
 
 <style lang="scss">
-    $color: red;
-    .test {
-        color: $color;
+    .home__container {
+        display: flex;
+        margin: 0;
+      justify-content: space-between;
     }
 </style>
