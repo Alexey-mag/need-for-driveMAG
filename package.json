@@ -5,8 +5,8 @@
   "scripts": {
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
-    "lint": "vue-cli-service lint"
-
+    "lint": "vue-cli-service lint",
+    "deploy": "node ./node_modules/vue-gh-pages/index.js"
   },
   "dependencies": {
     "core-js": "^3.6.5",
@@ -28,11 +28,14 @@
     "node-sass": "^5.0.0",
     "sass": "^1.32.0",
     "sass-loader": "^10.0.0",
+    "vue-gh-pages": "^1.19.1",
     "vue-template-compiler": "^2.6.11"
   },
   "browserslist": [
     "> 1%",
     "last 2 versions",
     "not dead"
-  ]
+  ],
+  "wst": "/dist/",
+  "homepage": "git@github.com:Alexey-mag/need-for-driveMAG"
 }
