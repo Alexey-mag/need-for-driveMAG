@@ -1,5 +1,5 @@
 module.exports = {
-    publicPath: process.env.NODE_ENV === 'production' ? '/vue-need-for-drive/' : '/',
+    publicPath: process.env.NODE_ENV === 'production' ? '/vue-need-for-driveMAG/' : '/',
     css: {
         requireModuleExtension: false,
         loaderOptions: {
