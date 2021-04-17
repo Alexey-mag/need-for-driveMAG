@@ -1,15 +1,26 @@
 <template>
-  <Home />
+  <div class="app">
+    <component :is="layout" />
+  </div>
 </template>
 
 <script>
-import Home from './views/Home'
+import DefaultLayout from "@/layouts/DefaultLayout";
 
 export default {
-    name: 'App',
-
-    components: {
-        Home
-    }
+  name: "App",
+  components: {
+    DefaultLayout
+  },
+  data() {
+    return {
+      layout: 'DefaultLayout'
+    };
+  }
 };
 </script>
+
+<style lang="scss">
+.app {
+}
+</style>

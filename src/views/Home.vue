@@ -6,24 +6,22 @@
 </template>
 
 <script>
-import MainPage from '@/components/MainPage'
-import SliderVue from '@/components/SliderVue';
+import MainPage from "@/components/MainPage";
+import SliderVue from "@/components/Slider/Slider";
 
 export default {
-    components: {
-        MainPage,
-        SliderVue
-    },
-    data: () => ({
-
-    })
-}
+  components: {
+    MainPage,
+    SliderVue
+  },
+  data: () => ({})
+};
 </script>
 
 <style lang="scss">
-    .home__container {
-        display: flex;
-        margin: 0;
-      justify-content: space-between;
-    }
+.home__container {
+  display: flex;
+  margin: 0;
+  justify-content: space-between;
+}
 </style>
