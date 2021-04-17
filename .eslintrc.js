@@ -1,14 +1,15 @@
 module.exports = {
     extends: [
-        'plugin:vue/recommended', 'google'
+        'plugin:vue/recommended',
+        'prettier'
     ],
     rules: {
-        'semi': 'off',
-        'arrow-parens': 'off',
-        'comma-dangle': 'off',
-        'linebreak-style': 'off',
-        'require-jsdoc': 'off',
-        'indent': ['error', 4],
-        'max-len': 'off'
+    },
+    parser: 'vue-eslint-parser',
+    parserOptions: {
+        parser: 'babel-eslint',
+        ecmaVersion: 8,
+        sourceType: 'module',
+        allowImportExportEverywhere: true
     }
 }
