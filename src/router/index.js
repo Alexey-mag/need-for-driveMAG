@@ -1,5 +1,11 @@
 import Vue from "vue";
 import VueRouter from "vue-router";
+import Home from '../views/Home';
+import Order from '../views/Order';
+import Location from '../components/Order/Location';
+import Model from '../components/Order/Model';
+import Additional from '../components/Order/Additional';
+import Total from '../components/Order/Total';
 
 
 Vue.use(VueRouter);
@@ -7,7 +13,7 @@ const routes = [
   {
     path: "/",
     name: "Home",
-    component: () => import("@/views/Home"),
+    component: Home,
     meta: {
       layout: "DefaultLayout"
     }
@@ -15,7 +21,7 @@ const routes = [
   {
     path: "/order",
     name: "Order",
-    component: () => import("@/views/Order"),
+    component: Order,
     meta: {
       layout: "DefaultLayout"
     },
@@ -23,7 +29,7 @@ const routes = [
       {
         path: "location",
         name: "Location",
-        component: import("@/components/Order/Location"),
+        component: Location,
         meta: {
           layout: "DefaultLayout"
         }
@@ -31,7 +37,7 @@ const routes = [
       {
         path: "model",
         name: "Model",
-        component: import("@/components/Order/Model"),
+        component: Model,
         meta: {
           layout: "DefaultLayout"
         }
@@ -39,7 +45,7 @@ const routes = [
       {
         path: "/order/additional",
         name: "Additional",
-        component: import("@/components/Order/Additional"),
+        component: Additional,
         meta: {
           layout: "DefaultLayout"
         }
@@ -47,7 +53,7 @@ const routes = [
       {
         path: "/order/total",
         name: "Total",
-        component: import("@/components/Order/Total"),
+        component: Total,
         meta: {
           layout: "DefaultLayout"
         }
@@ -58,7 +64,8 @@ const routes = [
 
 const router = new VueRouter({
   routes,
-  mode: "history"
+  mode: "history",
+  base: process.env.BASE_URL,
 });
 
 export default router;

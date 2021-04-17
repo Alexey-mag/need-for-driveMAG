@@ -14,7 +14,7 @@ export default {
   },
   data() {
     return {
-      layout: 'DefaultLayout'
+      layout: this.$route.meta.layout
     };
   }
 };
