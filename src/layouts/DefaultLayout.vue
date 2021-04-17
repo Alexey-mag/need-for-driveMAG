@@ -10,13 +10,13 @@ import MenuApp from "@/components/MenuApp";
 
 export default {
   name: "DefaultLayout",
-  components: {
-    MenuApp
-  },
   data() {
     return {
       layout: this.$route.meta.layout
     };
+  },
+  components: {
+    MenuApp
   }
 };
 </script>

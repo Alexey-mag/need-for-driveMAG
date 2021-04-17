@@ -62,7 +62,7 @@ export default {
         ]
     },
     getters: {
-        getBurgerStatus(state) {
+        isMenuOpen(state) {
             return state.isBurgerActive
         },
         menuItems(state) {
@@ -75,20 +75,6 @@ export default {
     mutations: {
         toggleBurgerMenu(state) {
             state.isBurgerActive = !state.isBurgerActive
-        },
-        counterUp(state) {
-            if (state.counter === state.slides.length) {
-                state.counter = 1
-            } else {
-                state.counter++
-            }
-        },
-        counterDown(state) {
-            if (state.counter === 1) {
-                state.counter = state.slides.length
-            } else {
-                state.counter--
-            }
         }
     },
     actions: {
