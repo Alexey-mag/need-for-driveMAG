@@ -1,5 +1,5 @@
 <template>
-    <div>Price</div>
+    <div class="order__price">Price</div>
 </template>
 
 <script>
@@ -8,6 +8,9 @@
     }
 </script>
 
-<style scoped>
-
+<style scoped lang="scss">
+    .order__price {
+        grid-area: 5 / 33 / 26 / 44;
+        background-color: cadetblue;
+    }
 </style>

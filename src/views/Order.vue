@@ -22,23 +22,23 @@ export default {
 
 <style scoped lang="scss">
   .order {
-    display: flex;
-    flex-wrap: wrap;
-    width: 100%;
+    display: grid;
+    grid-template-columns: repeat(43, 1fr);
+    grid-template-rows: repeat(25, 1fr);
+    grid-column-gap: 0px;
+    grid-row-gap: 0px;
     height: 100vh;
+    width: calc(100vw - 64px);
   }
   .order__footer {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    width: 100%;
-    height: 10%;
+    grid-area: 1 / 3 / 4 / 44;
     border-bottom: 1px solid $main-light-gray;
+    background-color: aqua;
   }
   .order__nav {
-    display: flex;
-    width: 100%;
-    height: fit-content;
+    grid-area: 4 / 3 / 5 / 44;
     border-bottom: 1px solid $main-light-gray;
+    background-color: bisque;
   }
+
 </style>
