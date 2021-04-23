@@ -25,11 +25,11 @@ export default {
 </script>
 
 <style scoped lang="scss">
-  .slides {
-    display: flex;
-    height: 100vh;
-    width: 100%;
-  }
+.slides {
+  display: flex;
+  height: 100vh;
+  width: 100%;
+}
 .slider__image {
   object-fit: cover;
   width: inherit;

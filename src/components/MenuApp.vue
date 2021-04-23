@@ -22,6 +22,7 @@
         v-for="menuItem in menuItems"
         :key="menuItem.id"
         class="main__burger__menu_item"
+        @click="toHomePage"
       >
         {{ menuItem.name.toUpperCase() }}
       </p>
@@ -55,6 +56,10 @@ export default {
       } else {
         this.lang = "Рус";
       }
+    },
+    toHomePage() {
+      this.$router.push("/");
+      this.toggleBurgerMenu();
     }
   }
 };

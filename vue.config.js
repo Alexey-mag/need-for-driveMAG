@@ -7,5 +7,17 @@ module.exports = {
                 additionalData: '@import "~@/styles/index.scss";'
             }
         }
+    },
+    devServer: {
+        proxy: {
+            "/api": {
+                "target": "https://api-factory.simbirsoft1.com/api",
+                "secure": false,
+                "logLevel": "debug",
+                "pathRewrite": {
+                    "^/api": ""
+                }
+            },
+        }
     }
 }

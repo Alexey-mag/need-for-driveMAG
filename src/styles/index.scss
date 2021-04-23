@@ -1,5 +1,5 @@
 @import "variables";
-@import url('https://fonts.googleapis.com/css2?family=Roboto&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Roboto&display=swap");
 
 * {
   margin: 0;
@@ -8,17 +8,18 @@
 }
 body {
   margin: 0 !important;
-  font-family: 'Roboto', sans-serif;
+  font-family: "Roboto", sans-serif;
 }
 
 @font-face {
-  font-family: 'fontello';
-  src: url('~@/assets/fonts/font/fontello.eot?36566988');
-  src: url('~@/assets/fonts/font/fontello.eot?36566988#iefix') format('embedded-opentype'),
-  url('~@/assets/fonts/font/fontello.woff2?36566988') format('woff2'),
-  url('~@/assets/fonts/font/fontello.woff?36566988') format('woff'),
-  url('~@/assets/fonts/font/fontello.ttf?36566988') format('truetype'),
-  url('~@/assets/fonts/font/fontello.svg?36566988#fontello') format('svg');
+  font-family: "fontello";
+  src: url("~@/assets/fonts/font/fontello.eot?36566988");
+  src: url("~@/assets/fonts/font/fontello.eot?36566988#iefix")
+      format("embedded-opentype"),
+    url("~@/assets/fonts/font/fontello.woff2?36566988") format("woff2"),
+    url("~@/assets/fonts/font/fontello.woff?36566988") format("woff"),
+    url("~@/assets/fonts/font/fontello.ttf?36566988") format("truetype"),
+    url("~@/assets/fonts/font/fontello.svg?36566988#fontello") format("svg");
   font-weight: normal;
   font-style: normal;
 }
@@ -33,7 +34,8 @@ body {
 }
 */
 
-[class^="icon-"]:before, [class*=" icon-"]:before {
+[class^="icon-"]:before,
+[class*=" icon-"]:before {
   font-family: "fontello";
   font-style: normal;
   font-weight: normal;
@@ -41,7 +43,7 @@ body {
   display: inline-block;
   text-decoration: inherit;
   width: 1em;
-  margin-right: .2em;
+  margin-right: 0.2em;
   text-align: center;
   /* opacity: .8; */
 
@@ -54,7 +56,7 @@ body {
 
   /* Animation center compensation - margins should be symmetric */
   /* remove if not needed */
-  margin-left: .2em;
+  margin-left: 0.2em;
 
   /* you can be more comfortable with increased icons size */
   /* font-size: 120%; */
@@ -67,6 +69,12 @@ body {
   /* text-shadow: 1px 1px 1px rgba(127, 127, 127, 0.3); */
 }
 
-.icon-telegram_white:before { content: '\e800'; } /* '' */
-.icon-facebook_white:before { content: '\e801'; } /* '' */
-.icon-instagram_white:before { content: '\e802'; } /* '' */
+.icon-telegram_white:before {
+  content: "\e800";
+} /* '' */
+.icon-facebook_white:before {
+  content: "\e801";
+} /* '' */
+.icon-instagram_white:before {
+  content: "\e802";
+} /* '' */

@@ -1,12 +1,11 @@
 import Vue from "vue";
 import VueRouter from "vue-router";
-import Home from '../views/Home';
-import Order from '../views/Order';
-import Location from '../components/Order/Location';
-import Model from '../components/Order/Model';
-import Additional from '../components/Order/Additional';
-import Total from '../components/Order/Total';
-
+import Home from "../views/Home";
+import Order from "../views/Order";
+import Location from "../components/Order/Location";
+import Model from "../components/Order/Model";
+import Additional from "../components/Order/Additional";
+import Total from "../components/Order/Total";
 
 Vue.use(VueRouter);
 const routes = [
@@ -65,7 +64,7 @@ const routes = [
 const router = new VueRouter({
   routes,
   mode: "history",
-  base: process.env.BASE_URL,
+  base: process.env.BASE_URL
 });
 
 export default router;

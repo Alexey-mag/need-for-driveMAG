@@ -13,8 +13,7 @@ export default {
   components: {
     MainPage,
     SliderVue
-  },
-  data: () => ({})
+  }
 };
 </script>
 

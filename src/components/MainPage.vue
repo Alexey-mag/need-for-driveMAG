@@ -1,19 +1,7 @@
 <template>
   <div class="main__container">
     <div class="main__content">
-      <header class="main__header">
-        <p class="main__text_green">
-          Need for drive
-        </p>
-        <div
-          style="display: flex; align-items: center; justify-content: space-between"
-        >
-          <img :src="'./images/main_map.svg'" alt="" />
-          <p class="main__text_city">
-            Ульяновск
-          </p>
-        </div>
-      </header>
+      <HeaderApp></HeaderApp>
       <main class="main__main">
         <h1 class="main__text_bold-black">
           Каршеринг
@@ -41,21 +29,16 @@
 </template>
 
 <script>
+import HeaderApp from "@/components/HeaderApp";
 export default {
-  name: "MainPage"
+  name: "MainPage",
+  components: { HeaderApp }
 };
 </script>
 
 <style scoped lang="scss">
 p {
   font-style: normal;
-}
-
-.main__text_green {
-  font-weight: bold;
-  font-size: 30px;
-  line-height: 35px;
-  color: $main-green;
 }
 
 .main__text_bold-black {
@@ -99,15 +82,6 @@ p {
     cursor: pointer;
   }
 }
-
-.main__text_city {
-  font-weight: normal;
-  font-size: 14px;
-  line-height: 16px;
-  color: $main-gray;
-  margin-left: 6px;
-}
-
 .main__button {
   background: linear-gradient(90deg, #0ec261 2.61%, #039f67 112.6%);
   background-blend-mode: darken;
@@ -148,11 +122,6 @@ p {
   height: 100vh;
   width: inherit;
   padding: 32px 64px 32px 64px;
-}
-
-.main__header {
-  display: flex;
-  justify-content: space-between;
 }
 
 .main__footer {
@@ -213,10 +182,7 @@ p {
     padding: 16px 16px 0 16px;
     margin: 0;
   }
-  .main__header {
-    flex-direction: column;
-    align-items: flex-end;
-  }
+
   .main__main {
     margin: 0;
     .main__text_bold-black,

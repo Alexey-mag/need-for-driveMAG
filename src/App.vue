@@ -16,6 +16,10 @@ export default {
     return {
       layout: this.$route.meta.layout
     };
+  },
+  mounted() {
+    this.$store.dispatch("order/fetchCity");
+    this.$store.dispatch("order/fetchPoints");
   }
 };
 </script>
