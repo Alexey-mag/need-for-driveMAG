@@ -3,6 +3,7 @@ export default {
   state: {
     counter: 1,
     isBurgerActive: false,
+    loading: false,
     slides: [
       {
         id: 1,
@@ -71,11 +72,17 @@ export default {
     },
     slides(state) {
       return state.slides;
+    },
+    loading(state){
+      return state.loading
     }
   },
   mutations: {
     toggleBurgerMenu(state) {
       state.isBurgerActive = !state.isBurgerActive;
+    },
+    setLoading(state, payload) {
+      state.loading = payload
     }
   },
   actions: {

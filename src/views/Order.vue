@@ -37,7 +37,7 @@
       ></component>
     </keep-alive>
     <!--    <router-view></router-view>-->
-    <price />
+    <Price />
   </div>
 </template>
 

@@ -1,10 +1,9 @@
 <template>
   <div class="order__autocomplete">
-    <label style="padding-right: 5px;" for="autocomplete_input">{{
+    <label style="padding-right: 5px;">{{
       label
-    }}</label>
+    }}
     <input
-      id="autocomplete_input"
       v-model="search"
       class="autocomplete__input"
       type="text"
@@ -12,6 +11,7 @@
       @blur="toggle = false"
       @focus="toggle = true"
     />
+    </label>
     <div v-if="toggle" class="location__form__cities">
       <div
         v-for="item in filteredItemsIn"
@@ -113,6 +113,7 @@ div::-webkit-scrollbar-thumb {
   position: absolute;
   width: 100%;
   height: 200px;
+  z-index: 99;
   overflow-y: scroll;
   background: #fff;
   box-shadow: 0 10px 20px rgba(0, 0, 0, 0.19), 0 6px 6px rgba(0, 0, 0, 0.23);

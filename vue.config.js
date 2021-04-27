@@ -8,7 +8,12 @@ module.exports = {
             }
         }
     },
-    devServer: {
+    devServer: process.env.NODE_ENV === 'production' ?  {} : proxy()
+}
+
+
+function proxy() {
+    return {
         proxy: {
             "/api": {
                 "target": "https://api-factory.simbirsoft1.com/api",

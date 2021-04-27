@@ -4,7 +4,7 @@
       Need for drive
     </p>
     <div class="main__header__city">
-      <img :src="'./images/main_map.svg'" alt="" />
+      <img :src="'/images/main_map.svg'" alt="" />
       <p class="main__text_city">
         {{ getCity.name }}
       </p>
