@@ -19,7 +19,6 @@ export default {
   },
   mounted() {
     this.$store.dispatch("order/fetchCity");
-    this.$store.dispatch("order/fetchPoints");
   }
 };
 </script>

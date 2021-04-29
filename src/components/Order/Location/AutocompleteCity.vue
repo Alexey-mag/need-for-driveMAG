@@ -1,17 +1,20 @@
 <template>
   <div class="order__autocomplete">
-    <label style="padding-right: 5px;">{{
-      label
-    }}
-    <input
-      v-model="search"
-      class="autocomplete__input"
-      type="text"
-      :placeholder="placeholder"
-      @blur="toggle = false"
-      @focus="toggle = true"
-    />
+    <div class="autocomplete__form_block">
+    <label class="autocomplete__label" style="padding-right: 5px;"
+      >{{ label }}
+      <input
+        v-model="search"
+        class="autocomplete__input"
+        type="text"
+        :placeholder="placeholder"
+        @change="toggle = true"
+        @blur="toggle = false"
+        @focus="toggle = true"
+      />
     </label>
+    <div @click="clearInput" class="autocomplete__icon_clear"></div>
+    </div>
     <div v-if="toggle" class="location__form__cities">
       <div
         v-for="item in filteredItemsIn"
@@ -28,12 +31,27 @@
 
 <script>
 export default {
-  name: "AutocompleteApp",
+  name: "AutocompleteCity",
   props: {
-    getItems: Array,
-    getItem: Object,
-    label: String,
-    placeholder: String
+    // clearPoint: {
+    //   type: Function
+    // },
+    getItems: {
+      type: Array,
+      require: true
+    },
+    getItem: {
+      type: Object,
+      default: null
+    },
+    label: {
+      type: String,
+      default: ""
+    },
+    placeholder: {
+      type: String,
+      default: ""
+    }
   },
   data() {
     return {
@@ -58,25 +76,40 @@ export default {
         return filteredItems;
       }
       return this.getItems;
-    }
+    },
+    // search: {
+    //   get() {
+    //     return this.getItem
+    //   },
+    //   set(val) {
+    //     this.setValue(val)
+    //   }
+    // }
   },
   watch: {
     getItems() {
-        this.search = ''
+      this.search = ""; // очищаем список точек при смене города
+    },
+    getItem() {
+     if (!this.getItem) {
+       this.search =''
+     }
     }
   },
   created() {
-    this.search = this.getItem.name;
+    if (this.getItem) {
+      this.search = this.getItem.name;
+    }
   },
   methods: {
     selectItem(item) {
       this.search = item.name;
-      const currentItemObj = this.getItems.find(el => {
-        return el.name === this.search;
-      });
-
-      this.$emit("setvalue", currentItemObj);
+      this.$emit("setValue", item);
       this.toggle = false;
+    },
+    clearInput() {
+      this.search =''
+      this.$emit('clear')
     }
   }
 };
@@ -96,12 +129,20 @@ div::-webkit-scrollbar-thumb {
   border-radius: 5px;
 }
 .autocomplete__input {
-  width: auto;
   border: none;
   border-bottom: 1px solid $main-gray;
   background: transparent;
   transition: all 0.2s ease;
   text-align: start;
+  line-height: 16px;
+  font-size: 14px;
+  font-weight: 300;
+  margin-left: 10px;
+  width: 250px;
+  text-indent: 8px;
+  outline: none;
+  position: absolute;
+  right: 0;
 
   &:focus {
     outline: none !important;
@@ -111,8 +152,10 @@ div::-webkit-scrollbar-thumb {
 
 .location__form__cities {
   position: absolute;
-  width: 100%;
-  height: 200px;
+  width: 250px;
+  right: 0;
+  height: auto;
+  max-height: 200px;
   z-index: 99;
   overflow-y: scroll;
   background: #fff;
@@ -127,4 +170,22 @@ div::-webkit-scrollbar-thumb {
     color: $main-green;
   }
 }
+.autocomplete__form_block {
+  position: relative;
+  margin-bottom: 12px;
+}
+  .autocomplete__icon_clear {
+    background: url("~@/assets/location_clear.svg");
+    width: 8px;
+    height: 8px;
+    position: absolute;
+    right: 0;
+    top: 0;
+    cursor: pointer;
+  }
+  .autocomplete__label {
+    font-weight: 300;
+    font-size: 14px;
+    line-height: 16px;
+  }
 </style>

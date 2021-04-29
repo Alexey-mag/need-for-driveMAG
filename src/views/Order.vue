@@ -43,7 +43,7 @@
 
 <script>
 import Price from "@/components/Order/Price";
-import Location from "@/components/Order/Location";
+import Location from "@/components/Order/Location/Location";
 import Model from "@/components/Order/Model";
 import Additional from "@/components/Order/Additional";
 import Total from "@/components/Order/Total";

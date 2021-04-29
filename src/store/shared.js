@@ -4,6 +4,7 @@ export default {
     counter: 1,
     isBurgerActive: false,
     loading: false,
+    isMapReady: false,
     slides: [
       {
         id: 1,
@@ -75,6 +76,9 @@ export default {
     },
     loading(state){
       return state.loading
+    },
+    mapStatus(state) {
+      return state.isMapReady
     }
   },
   mutations: {
@@ -83,6 +87,9 @@ export default {
     },
     setLoading(state, payload) {
       state.loading = payload
+    },
+    setMapStatus(state, payload) {
+      state.isMapReady = payload
     }
   },
   actions: {

@@ -6,7 +6,7 @@
     <div class="main__header__city">
       <img :src="'/images/main_map.svg'" alt="" />
       <p class="main__text_city">
-        {{ getCity.name }}
+        {{ getCity ? getCity.name : '' }}
       </p>
     </div>
   </header>

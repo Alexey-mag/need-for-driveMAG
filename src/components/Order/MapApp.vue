@@ -1,6 +1,6 @@
 <template>
-    <div class="location__map__container" v-if="getPoints.length > 0">
-        <yandex-map
+    <div class="location__map__container">
+        <yandex-map v-if="mapStatus && getCity"
                 :settings="settings"
                 :coords="coords"
                 :zoom="zoom"
@@ -11,7 +11,7 @@
                     :key="point.id"
                     :marker-id="point.id"
                     :coords="point.coords"
-                    :icon.sync="markerIcon"
+                    :icon="markerIcon"
                     :hint-content="`${point.name},  ${point.address}`"
                     @click="markerOnCenter(point)"
             />
@@ -31,9 +31,9 @@
                 settings: {
                     apiKey: "a77bd471-3a16-4a8c-8604-aa8285380d79",
                     lang: "ru_RU",
-                    coordorder: "longlat"
+                    coordorder: "longlat",
+                    version: '2.1'
                 },
-                // coords: [48.399934, 54.320883],
                 zoom: 12,
                 markerIcon: {
                     layout: 'default#imageWithContent',
@@ -47,14 +47,19 @@
             };
         },
         computed: {
-            ...mapGetters("order", ["getPoints", "getPoint"]),
+            ...mapGetters("order", ["getPoints", "getPoint", 'getCity']),
+            ...mapGetters( 'shared', ['loading', 'mapStatus']),
             coords() {
-              return   this.getPoint ? this.getPoint.coords : [48.399934, 54.320883]
-            }
+              return   this.getPoint ? this.getPoint.coords : this.getCity.coords
+            },
+            // zoom() {
+            //     return this.getPoint ? 17 : 12
+            // }
         },
         methods: {
             markerOnCenter(point) {
                 this.$store.dispatch('order/setPoint', point)
+                // this.zoom = 17
             }
         }
     };

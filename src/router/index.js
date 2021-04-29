@@ -2,7 +2,7 @@ import Vue from "vue";
 import VueRouter from "vue-router";
 import Home from "../views/Home";
 import Order from "../views/Order";
-import Location from "../components/Order/Location";
+import Location from "../components/Order/Location/Location";
 import Model from "../components/Order/Model";
 import Additional from "../components/Order/Additional";
 import Total from "../components/Order/Total";
@@ -54,14 +54,6 @@ const routes = [
         path: "/order/total",
         name: "Total",
         component: Total,
-        meta: {
-          layout: "DefaultLayout"
-        }
-      },
-      {
-        path: "/order",
-        name: "Price",
-        component: Price,
         meta: {
           layout: "DefaultLayout"
         }

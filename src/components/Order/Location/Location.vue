@@ -2,20 +2,22 @@
   <div class="location">
     <div class="location__form_container">
       <form name="order_form" class="location__form">
-        <autocomplete-app
+        <autocomplete-city
           :get-items="getCities"
-          :get-item="getCity"
+          :get-item.sync="city"
           :label="labelCity"
           placeholder="Начните вводить город..."
-          @setvalue="setCity"
-        ></autocomplete-app>
-        <autocomplete-app
+          @setValue="setCity"
+          @clear="clearCity"
+        ></autocomplete-city>
+        <autocomplete-city
           :label="labelPoint"
           :get-items="getPoints"
-          :get-item="getPoint"
+          :get-item.sync="point"
           placeholder="Начните вводить пункт выдачи..."
-          @setvalue="setPoint"
-        ></autocomplete-app>
+          @setValue="setPoint"
+          @clear="clearPoint"
+        ></autocomplete-city>
       </form>
       <span>Выбрать на карте</span>
     </div>
@@ -26,12 +28,12 @@
 </template>
 
 <script>
-import { mapGetters } from "vuex";
-import AutocompleteApp from "@/components/Order/AutocompleteApp";
+import { mapGetters, mapMutations } from "vuex";
+import AutocompleteCity from "@/components/Order/Location/AutocompleteCity";
 import MapApp from "@/components/Order/MapApp";
 export default {
   name: "Location",
-  components: {MapApp, AutocompleteApp },
+  components: { MapApp, AutocompleteCity },
   data() {
     return {
       labelCity: "Город",
@@ -41,7 +43,23 @@ export default {
     };
   },
   computed: {
-    ...mapGetters("order", ["getCities", "getPoints", "getCity", "getPoint"])
+    ...mapGetters("order", ["getCities", "getPoints", "getCity", "getPoint"]),
+    city: {
+      get() {
+        return this.getCity;
+      },
+      set(value) {
+        this.$store.dispatch("order/setCity", value);
+      }
+    },
+    point: {
+      get() {
+        return this.getPoint;
+      },
+      set(value) {
+        this.$store.dispatch("order/setPoint", value);
+      }
+    }
   },
   methods: {
     setCity(val) {
@@ -49,6 +67,15 @@ export default {
     },
     setPoint(val) {
       this.$store.dispatch("order/setPoint", val);
+    },
+    clearCity() {
+      this.$store.dispatch("order/clearCity");
+    },
+    clearPoint() {
+      this.$store.dispatch("order/clearPoint");
+    },
+    clearSearch() {
+      this.search =''
     }
   }
 };
@@ -70,7 +97,7 @@ export default {
   justify-content: space-between;
   align-items: center;
   width: 100%;
-  min-width: 300px;
+  min-width: 370px;
 }
 .location__form {
   width: 100%;
