@@ -74,11 +74,11 @@ export default {
     slides(state) {
       return state.slides;
     },
-    loading(state){
-      return state.loading
+    loading(state) {
+      return state.loading;
     },
     mapStatus(state) {
-      return state.isMapReady
+      return state.isMapReady;
     }
   },
   mutations: {
@@ -86,10 +86,10 @@ export default {
       state.isBurgerActive = !state.isBurgerActive;
     },
     setLoading(state, payload) {
-      state.loading = payload
+      state.loading = payload;
     },
     setMapStatus(state, payload) {
-      state.isMapReady = payload
+      state.isMapReady = payload;
     }
   },
   actions: {

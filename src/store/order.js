@@ -55,12 +55,12 @@ export default {
       });
     },
     clearCity(state) {
-      state.currentCity = null
-      state.currentPoint = null
+      state.currentCity = null;
+      state.currentPoint = null;
     },
     clearPoint(state) {
-      state.currentPoint = null
-    },
+      state.currentPoint = null;
+    }
   },
   actions: {
     async fetchPointCoords(context, payload) {

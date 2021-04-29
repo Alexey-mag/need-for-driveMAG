@@ -1,7 +1,9 @@
 <template>
   <div class="order__price">
     <p>Ваш заказ</p>
-    <div v-if="getPoint">{{ getPoint.cityId.name }}<br>{{getPoint.address}}</div>
+    <div v-if="getPoint">
+      {{ getPoint.cityId.name }}<br />{{ getPoint.address }}
+    </div>
     <button @click="lookAtPoints">Click</button>
   </div>
 </template>

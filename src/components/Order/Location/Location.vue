@@ -75,7 +75,7 @@ export default {
       this.$store.dispatch("order/clearPoint");
     },
     clearSearch() {
-      this.search =''
+      this.search = "";
     }
   }
 };

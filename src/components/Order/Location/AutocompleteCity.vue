@@ -1,19 +1,19 @@
 <template>
   <div class="order__autocomplete">
     <div class="autocomplete__form_block">
-    <label class="autocomplete__label" style="padding-right: 5px;"
-      >{{ label }}
-      <input
-        v-model="search"
-        class="autocomplete__input"
-        type="text"
-        :placeholder="placeholder"
-        @change="toggle = true"
-        @blur="toggle = false"
-        @focus="toggle = true"
-      />
-    </label>
-    <div @click="clearInput" class="autocomplete__icon_clear"></div>
+      <label class="autocomplete__label" style="padding-right: 5px;"
+        >{{ label }}
+        <input
+          v-model="search"
+          class="autocomplete__input"
+          type="text"
+          :placeholder="placeholder"
+          @change="toggle = true"
+          @blur="toggle = false"
+          @focus="toggle = true"
+        />
+      </label>
+      <div @click="clearInput" class="autocomplete__icon_clear"></div>
     </div>
     <div v-if="toggle" class="location__form__cities">
       <div
@@ -76,7 +76,7 @@ export default {
         return filteredItems;
       }
       return this.getItems;
-    },
+    }
     // search: {
     //   get() {
     //     return this.getItem
@@ -91,9 +91,9 @@ export default {
       this.search = ""; // очищаем список точек при смене города
     },
     getItem() {
-     if (!this.getItem) {
-       this.search =''
-     }
+      if (!this.getItem) {
+        this.search = "";
+      }
     }
   },
   created() {
@@ -108,8 +108,8 @@ export default {
       this.toggle = false;
     },
     clearInput() {
-      this.search =''
-      this.$emit('clear')
+      this.search = "";
+      this.$emit("clear");
     }
   }
 };
@@ -174,18 +174,18 @@ div::-webkit-scrollbar-thumb {
   position: relative;
   margin-bottom: 12px;
 }
-  .autocomplete__icon_clear {
-    background: url("~@/assets/location_clear.svg");
-    width: 8px;
-    height: 8px;
-    position: absolute;
-    right: 0;
-    top: 0;
-    cursor: pointer;
-  }
-  .autocomplete__label {
-    font-weight: 300;
-    font-size: 14px;
-    line-height: 16px;
-  }
+.autocomplete__icon_clear {
+  background: url("~@/assets/location_clear.svg");
+  width: 8px;
+  height: 8px;
+  position: absolute;
+  right: 0;
+  top: 0;
+  cursor: pointer;
+}
+.autocomplete__label {
+  font-weight: 300;
+  font-size: 14px;
+  line-height: 16px;
+}
 </style>

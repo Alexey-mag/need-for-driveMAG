@@ -106,6 +106,6 @@ export default {
   grid-area: 4 / 1 / 5 / 44;
   border-top: 1px solid $main-light-gray;
   border-bottom: 1px solid $main-light-gray;
-  padding-left: calc(100%/43*2);
+  padding-left: calc(100% / 43 * 2);
 }
 </style>
