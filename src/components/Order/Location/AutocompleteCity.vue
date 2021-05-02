@@ -146,7 +146,7 @@ div::-webkit-scrollbar-thumb {
 
   &:focus {
     outline: none !important;
-    border-bottom: 1px solid blue;
+    border-bottom: 1px solid $main-green;
   }
 }
 

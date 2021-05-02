@@ -62,9 +62,46 @@ export default {
         id: 4,
         name: "Обслуживание"
       }
-    ]
+    ],
+    orderComponents: [
+      {
+        id: 1,
+        name: "Location",
+        tag: "Местоположение"
+      },
+      {
+        id: 2,
+        name: "Model",
+        tag: "Модель"
+      },
+      {
+        id: 3,
+        name: "Additional",
+        tag: "Дополнительно"
+      },
+      {
+        id: 4,
+        name: "Total",
+        tag: "Итого"
+      }
+    ],
+    currentComponent: "Location"
   },
   getters: {
+    getPriceButtonText(state) {
+      switch (state.currentComponent) {
+      case 'Location': return 'Выбрать модель'
+      case 'Model': return 'Дополнительно'
+      case 'Additional': return 'Итого'
+      case 'Total': return 'Заказать'
+      }
+    },
+    orderComponents(state) {
+      return state.orderComponents
+    },
+    currentComponent(state) {
+      return state.currentComponent
+    },
     isMenuOpen(state) {
       return state.isBurgerActive;
     },
@@ -82,6 +119,9 @@ export default {
     }
   },
   mutations: {
+    setCurrentComponent(state, payload) {
+      state.currentComponent = payload
+    },
     toggleBurgerMenu(state) {
       state.isBurgerActive = !state.isBurgerActive;
     },
@@ -96,11 +136,9 @@ export default {
     toggleBurgerMenu({ commit }) {
       commit("toggleBurgerMenu");
     },
-    counterUp({ commit }) {
-      commit("counterUp");
-    },
-    counterDown({ commit }) {
-      commit("counterDown");
+    setCurrentComponent({commit}, payload) {
+      commit('setCurrentComponent', payload)
     }
   }
+
 };

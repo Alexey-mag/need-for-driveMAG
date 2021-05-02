@@ -4,7 +4,7 @@ export default {
   namespaced: true,
   state: {
     cities: [],
-    currentCity: {},
+    currentCity: null,
     currentPoint: null,
     currentCityPoints: []
   },
@@ -108,9 +108,6 @@ export default {
           const pointCoords =
             response.data.response.GeoObjectCollection.featureMember[0]
               .GeoObject.Point;
-          // editedCoords = Object.values(pointCoords.pos.split(" "));
-          // console.log(editedCoords);
-          // context.commit('addCoordsToCity', editedCoords)
           payload["coords"] = Object.values(pointCoords.pos.split(" "));
           cityForMapComponent = payload;
         })
