@@ -4,18 +4,75 @@
       <HeaderApp />
     </div>
     <nav class="order__nav">
-      <ul class="order__steps">
-        <li
-          v-for="component in orderComponents"
-          :key="component.id"
+      <div class="order__steps">
+        <div
           class="order__step__container"
         >
-          <button class="order__step" @click="changeCurrentComponent(component)">
-            {{ component.tag }}
+          <button
+            class="order__step"
+            :class="{
+              order__step_active: orderComponents[0].isActive,
+              order__step_disabled: orderComponents[0].isDisabled,
+              order__step_finished: !orderComponents[0].isDisabled
+            }"
+            @click="changeCurrentComponent(orderComponents[0])"
+          >
+            {{ orderComponents[0].tag }}
           </button>
           <div class="order__arrow" />
-        </li>
-      </ul>
+        </div>
+        <div
+                class="order__step__container"
+        >
+          <button
+                  class="order__step"
+                  :disabled="orderComponents[0].isDisabled"
+                  :class="{
+              order__step_active: orderComponents[1].isActive,
+              order__step_disabled: orderComponents[0].isDisabled,
+              order__step_finished: !orderComponents[0].isDisabled
+            }"
+                  @click="changeCurrentComponent(orderComponents[1])"
+          >
+            {{ orderComponents[1].tag }}
+          </button>
+          <div class="order__arrow" />
+        </div>
+        <div
+                class="order__step__container"
+        >
+          <button
+                  class="order__step"
+                  :disabled="orderComponents[1].isDisabled"
+                  :class="{
+              order__step_active: orderComponents[2].isActive,
+              order__step_disabled: orderComponents[1].isDisabled,
+              order__step_finished: !orderComponents[1].isDisabled
+            }"
+                  @click="changeCurrentComponent(orderComponents[2])"
+          >
+            {{ orderComponents[2].tag }}
+          </button>
+          <div class="order__arrow" />
+        </div>
+        <div
+                class="order__step__container"
+        >
+          <button
+                  class="order__step"
+                  :disabled="orderComponents[2].isDisabled"
+                  :class="{
+              order__step_active: orderComponents[3].isActive,
+              order__step_disabled: orderComponents[2].isDisabled,
+              order__step_finished: !orderComponents[2].isDisabled
+            }"
+                  @click="changeCurrentComponent(orderComponents[3])"
+          >
+            {{ orderComponents[3].tag }}
+          </button>
+          <div class="order__arrow" />
+        </div>
+      </div>
       <!--      <router-link :to="{ name: 'Location' }">Location /</router-link>-->
       <!--      <router-link :to="{ name: 'Model' }">Model /</router-link>-->
       <!--      <router-link :to="{ name: 'Additional' }">Additional /</router-link>-->
@@ -24,19 +81,19 @@
     <keep-alive>
       <component
         :is="orderComponents[0].name"
-        v-if="currentComponent === orderComponents[0].name"
+        v-if="currentComponent.name === orderComponents[0].name"
       ></component>
       <component
         :is="orderComponents[1].name"
-        v-if="currentComponent === orderComponents[1].name"
+        v-if="currentComponent.name === orderComponents[1].name"
       ></component>
       <component
         :is="orderComponents[2].name"
-        v-if="currentComponent === orderComponents[2].name"
+        v-if="currentComponent.name === orderComponents[2].name"
       ></component>
       <component
         :is="orderComponents[3].name"
-        v-if="currentComponent === orderComponents[3].name"
+        v-if="currentComponent.name === orderComponents[3].name"
       ></component>
     </keep-alive>
     <!--    <router-view></router-view>-->
@@ -57,11 +114,21 @@ export default {
   components: { Price, Location, Additional, Model, Total, HeaderApp },
   methods: {
     changeCurrentComponent(component) {
-      this.$store.dispatch('shared/setCurrentComponent', component.name);
+      this.$store.dispatch("shared/setCurrentComponent", component);
     }
   },
   computed: {
-    ...mapGetters("shared", ["orderComponents", "currentComponent"])
+    ...mapGetters("shared", ["orderComponents", "currentComponent"]),
+    ...mapGetters('order', ['getLocationStatus']),
+    ...mapGetters('model', ['getModelStatus'])
+  },
+  watch: {
+    getLocationStatus(res) {
+      this.$store.dispatch('shared/setComponentStatus',res)
+    },
+    getModelStatus(res) {
+      this.$store.dispatch('shared/setComponentStatus',res)
+    }
   }
 };
 </script>
@@ -105,6 +172,17 @@ export default {
   cursor: pointer;
   border: none;
   background-color: inherit;
+}
+.order__step_active {
+  color: $main-green !important;
+  cursor: pointer !important;
+}
+.order__step_disabled {
+  color: $main-gray;
+  cursor: initial;
+}
+.order__step_finished {
+  color: $main-black;
 }
 .order__arrow {
   align-self: center;

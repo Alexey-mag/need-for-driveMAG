@@ -67,40 +67,48 @@ export default {
       {
         id: 1,
         name: "Location",
-        tag: "Местоположение"
+        tag: "Местоположение",
+        isActive: true,
+        isDisabled: true,
+        buttonText: "Выбрать модель"
       },
       {
         id: 2,
         name: "Model",
-        tag: "Модель"
+        tag: "Модель",
+        isActive: false,
+        isDisabled: true,
+        buttonText: "Дополнительно"
       },
       {
         id: 3,
         name: "Additional",
-        tag: "Дополнительно"
+        tag: "Дополнительно",
+        isActive: false,
+        isDisabled: true,
+        buttonText: "Итого"
       },
       {
         id: 4,
         name: "Total",
-        tag: "Итого"
+        tag: "Итого",
+        isActive: false,
+        isDisabled: true,
+        buttonText: "Заказать"
       }
     ],
-    currentComponent: "Location"
+    currentComponent: null
   },
   getters: {
-    getPriceButtonText(state) {
-      switch (state.currentComponent) {
-      case 'Location': return 'Выбрать модель'
-      case 'Model': return 'Дополнительно'
-      case 'Additional': return 'Итого'
-      case 'Total': return 'Заказать'
-      }
-    },
     orderComponents(state) {
-      return state.orderComponents
+      return state.orderComponents;
     },
     currentComponent(state) {
-      return state.currentComponent
+      if (state.currentComponent) {
+        return state.currentComponent;
+      } else {
+        return state.orderComponents[0]
+      }
     },
     isMenuOpen(state) {
       return state.isBurgerActive;
@@ -119,8 +127,28 @@ export default {
     }
   },
   mutations: {
+    setComponentStatus(state, payload) {
+      const components = state.orderComponents.map(el => {
+        if (el.id === payload.id) {
+          el.isDisabled = payload.isDisabled
+          return el
+        }
+        return el
+      })
+      state.orderComponents = components
+    },
     setCurrentComponent(state, payload) {
-      state.currentComponent = payload
+      const components = state.orderComponents.map(el => {
+        if (el.name === payload.name) {
+          el.isActive = true;
+          state.currentComponent = el;
+          return el;
+        } else {
+          el.isActive = false
+          return el;
+        }
+      });
+      state.orderComponents = components;
     },
     toggleBurgerMenu(state) {
       state.isBurgerActive = !state.isBurgerActive;
@@ -130,15 +158,27 @@ export default {
     },
     setMapStatus(state, payload) {
       state.isMapReady = payload;
+    },
+    toNextStep(state) {
+      let nextComponentId = {...state.currentComponent.id}
+      nextComponentId+=1
+      state.currentComponent = state.orderComponents.find(el => {
+        el.id = nextComponentId
+      })
     }
   },
   actions: {
     toggleBurgerMenu({ commit }) {
       commit("toggleBurgerMenu");
     },
-    setCurrentComponent({commit}, payload) {
-      commit('setCurrentComponent', payload)
+    setCurrentComponent({ commit }, payload) {
+      commit("setCurrentComponent", payload);
+    },
+    setComponentStatus({commit}, payload) {
+      commit('setComponentStatus', payload)
+    },
+    toNextStep({commit}) {
+      commit('toNextStep')
     }
   }
-
 };

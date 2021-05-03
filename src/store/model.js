@@ -12,6 +12,12 @@ export default {
         },
         getCar(state) {
             return state.car
+        },
+        getModelStatus(state) {
+            if (state.car) {
+                return { id: 2, isDisabled: false };
+            }
+            return { id: 2, isDisabled: true };
         }
     },
     mutations: {

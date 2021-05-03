@@ -43,7 +43,7 @@ const routes = [
         }
       },
       {
-        path: "/order/additional",
+        path: "additional",
         name: "Additional",
         component: Additional,
         meta: {
@@ -51,7 +51,7 @@ const routes = [
         }
       },
       {
-        path: "/order/total",
+        path: "total",
         name: "Total",
         component: Total,
         meta: {

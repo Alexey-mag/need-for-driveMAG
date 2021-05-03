@@ -20,6 +20,12 @@ export default {
     },
     getPoint(state) {
       return state.currentPoint;
+    },
+    getLocationStatus(state) {
+      if (state.currentCity && state.currentPoint) {
+        return { id: 1, isDisabled: false };
+      }
+      return { id: 1, isDisabled: true };
     }
   },
   mutations: {

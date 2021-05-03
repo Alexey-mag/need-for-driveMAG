@@ -16,7 +16,7 @@
       </div>
     </div>
     <div class="price__total" v-if="getCar">Цена: от{{getCar.priceMin}} до {{getCar.priceMax}} ₽</div>
-    <button @click="lookAtPoints" class="price__button">{{getPriceButtonText}}</button>
+    <button @click="toNextStep" class="price__button" :class="{price__button_disabled: currentComponent.isDisabled}" :disabled="currentComponent.isDisabled">{{currentComponent.buttonText}}</button>
   </div>
 </template>
 
@@ -27,12 +27,14 @@ export default {
   computed: {
     ...mapGetters("order", ["getCity", "getPoint", "getPoints"]),
     ...mapGetters('model', ['getCar']),
-    ...mapGetters('shared',['getPriceButtonText'])
+    ...mapGetters('shared',['currentComponent'])
   },
   methods: {
-    lookAtPoints() {
+    toNextStep() {
       console.log(this.getPoints);
       console.log(this.getPoint);
+      console.log(this.currentComponent);
+      this.$store.dispatch('shared/toNextStep')
     }
   }
 };
@@ -74,6 +76,11 @@ export default {
     &:active {
       filter: brightness(0.8);
     }
+  }
+  .price__button_disabled {
+    background: $main-light-gray !important;
+    color: white;
+    cursor: initial !important;
   }
   .price__title {
     font-weight: 500;
