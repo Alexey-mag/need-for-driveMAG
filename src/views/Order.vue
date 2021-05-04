@@ -4,15 +4,75 @@
       <HeaderApp />
     </div>
     <nav class="order__nav">
-      <ul style="list-style: none; display: flex;">
-        <li
-          v-for="component in orderComponents"
-          :key="component.id"
-          @click="changeCurrentComponent(component)"
+      <div class="order__steps">
+        <div
+          class="order__step__container"
         >
-          {{ component.tag }}
-        </li>
-      </ul>
+          <button
+            class="order__step"
+            :class="{
+              order__step_active: orderComponents[0].isActive,
+              order__step_disabled: orderComponents[0].isDisabled,
+              order__step_finished: !orderComponents[0].isDisabled
+            }"
+            @click="changeCurrentComponent(orderComponents[0])"
+          >
+            {{ orderComponents[0].tag }}
+          </button>
+          <div class="order__arrow" />
+        </div>
+        <div
+                class="order__step__container"
+        >
+          <button
+                  class="order__step"
+                  :disabled="orderComponents[0].isDisabled"
+                  :class="{
+              order__step_active: orderComponents[1].isActive,
+              order__step_disabled: orderComponents[0].isDisabled,
+              order__step_finished: !orderComponents[0].isDisabled
+            }"
+                  @click="changeCurrentComponent(orderComponents[1])"
+          >
+            {{ orderComponents[1].tag }}
+          </button>
+          <div class="order__arrow" />
+        </div>
+        <div
+                class="order__step__container"
+        >
+          <button
+                  class="order__step"
+                  :disabled="orderComponents[1].isDisabled"
+                  :class="{
+              order__step_active: orderComponents[2].isActive,
+              order__step_disabled: orderComponents[1].isDisabled,
+              order__step_finished: !orderComponents[1].isDisabled
+            }"
+                  @click="changeCurrentComponent(orderComponents[2])"
+          >
+            {{ orderComponents[2].tag }}
+          </button>
+          <div class="order__arrow" />
+        </div>
+        <div
+                class="order__step__container"
+        >
+          <button
+                  class="order__step"
+                  :disabled="orderComponents[2].isDisabled"
+                  :class="{
+              order__step_active: orderComponents[3].isActive,
+              order__step_disabled: orderComponents[2].isDisabled,
+              order__step_finished: !orderComponents[2].isDisabled
+            }"
+                  @click="changeCurrentComponent(orderComponents[3])"
+          >
+            {{ orderComponents[3].tag }}
+          </button>
+          <div class="order__arrow" />
+        </div>
+      </div>
       <!--      <router-link :to="{ name: 'Location' }">Location /</router-link>-->
       <!--      <router-link :to="{ name: 'Model' }">Model /</router-link>-->
       <!--      <router-link :to="{ name: 'Additional' }">Additional /</router-link>-->
@@ -21,19 +81,19 @@
     <keep-alive>
       <component
         :is="orderComponents[0].name"
-        v-if="currentComponent === orderComponents[0].name"
+        v-if="currentComponent.name === orderComponents[0].name"
       ></component>
       <component
         :is="orderComponents[1].name"
-        v-if="currentComponent === orderComponents[1].name"
+        v-if="currentComponent.name === orderComponents[1].name"
       ></component>
       <component
         :is="orderComponents[2].name"
-        v-if="currentComponent === orderComponents[2].name"
+        v-if="currentComponent.name === orderComponents[2].name"
       ></component>
       <component
         :is="orderComponents[3].name"
-        v-if="currentComponent === orderComponents[3].name"
+        v-if="currentComponent.name === orderComponents[3].name"
       ></component>
     </keep-alive>
     <!--    <router-view></router-view>-->
@@ -48,48 +108,32 @@ import Model from "@/components/Order/Model";
 import Additional from "@/components/Order/Additional";
 import Total from "@/components/Order/Total";
 import HeaderApp from "@/components/HeaderApp";
+import { mapGetters } from "vuex";
 export default {
   name: "Order",
   components: { Price, Location, Additional, Model, Total, HeaderApp },
-  data() {
-    return {
-      orderComponents: [
-        {
-          id: 1,
-          name: "Location",
-          tag: "Местоположение"
-        },
-        {
-          id: 2,
-          name: "Model",
-          tag: "Модель"
-        },
-        {
-          id: 3,
-          name: "Additional",
-          tag: "Дополнительно"
-        },
-        {
-          id: 4,
-          name: "Total",
-          tag: "Итого"
-        }
-      ],
-      currentComponent: "Location"
-    };
-  },
   methods: {
     changeCurrentComponent(component) {
-      this.currentComponent = component.name;
+      this.$store.dispatch("shared/setCurrentComponent", component);
+    }
+  },
+  computed: {
+    ...mapGetters("shared", ["orderComponents", "currentComponent"]),
+    ...mapGetters('order', ['getLocationStatus']),
+    ...mapGetters('model', ['getModelStatus'])
+  },
+  watch: {
+    getLocationStatus(res) {
+      this.$store.dispatch('shared/setComponentStatus',res)
+    },
+    getModelStatus(res) {
+      this.$store.dispatch('shared/setComponentStatus',res)
     }
   }
 };
 </script>
 
 <style scoped lang="scss">
-.order__nav ul li {
-  cursor: pointer;
-}
 .order {
   display: grid;
   grid-template-columns: repeat(43, 1fr);
@@ -107,5 +151,44 @@ export default {
   border-top: 1px solid $main-light-gray;
   border-bottom: 1px solid $main-light-gray;
   padding-left: calc(100% / 43 * 2);
+}
+.order__steps {
+  height: 100%;
+  list-style: none;
+  display: flex;
+  align-items: center;
+}
+.order__step__container {
+  display: flex;
+  &:nth-child(4) .order__arrow {
+    display: none;
+  }
+}
+.order__step {
+  font-weight: bold;
+  font-size: 14px;
+  line-height: 16px;
+  margin-right: 16px;
+  cursor: pointer;
+  border: none;
+  background-color: inherit;
+}
+.order__step_active {
+  color: $main-green !important;
+  cursor: pointer !important;
+}
+.order__step_disabled {
+  color: $main-gray;
+  cursor: initial;
+}
+.order__step_finished {
+  color: $main-black;
+}
+.order__arrow {
+  align-self: center;
+  margin-right: 16px;
+  height: 8px;
+  width: 6px;
+  background: url("~@/assets/order_arrow.svg");
 }
 </style>
