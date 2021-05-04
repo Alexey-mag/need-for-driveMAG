@@ -13,7 +13,7 @@
           @focus="toggle = true"
         />
       </label>
-      <div @click="clearInput" class="autocomplete__icon_clear"></div>
+      <div class="autocomplete__icon_clear" @click="clearInput"></div>
     </div>
     <div v-if="toggle" class="location__form__cities">
       <div
