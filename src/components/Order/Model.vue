@@ -1,87 +1,160 @@
 <template>
-  <div class="order__model" v-if="getCars">
-    <div class="model__car_class_switch"></div>
+  <div v-if="getCars" class="order__model">
+    <div class="model__car_class_switch">
+      <el-radio-group v-model="radioSelected" text-color="#FFFFFF">
+        <el-radio
+          v-for="cat in getCarCategory"
+          :key="cat"
+          :label="cat"
+        ></el-radio>
+      </el-radio-group>
+    </div>
     <div class="model__container">
-    <div class="model__car_card" v-for="car in getCars" :key="car.id" @click="selectCar(car)">
-    <div class="model__car_name">
-      {{car.name.toUpperCase().split(',')[1] ? car.name.toUpperCase().split(',')[1] : car.name}}
-    </div>
-      <div class="model__car_cost">
-        {{car.priceMin}} - {{car.priceMax}} ₽
+      <div
+        v-for="car in filteredCars"
+        :key="car.id"
+        class="model__car_card"
+        @click="selectCar(car)"
+      >
+        <div class="model__car_name">
+          {{
+            car.name.toUpperCase().split(",")[1]
+              ? car.name.toUpperCase().split(",")[1]
+              : car.name
+          }}
+        </div>
+        <div class="model__car_cost">
+          {{ car.priceMin }} - {{ car.priceMax }} ₽
+        </div>
+        <img
+          class="model__car_image"
+          :src="'https://api-factory.simbirsoft1.com' + car.thumbnail.path"
+          alt=""
+          @error="defaultImage"
+        />
       </div>
-        <img class="model__car_image" :src="'https://api-factory.simbirsoft1.com' + car.thumbnail.path" alt="">
     </div>
+    <div class="model__loading">
+      <Loader v-if="loading" />
     </div>
   </div>
 </template>
 
 <script>
-  import {mapGetters} from 'vuex'
+import { mapGetters } from "vuex";
+import Loader from "../Loader";
+
 export default {
   name: "Model",
-  computed: {
-    ...mapGetters('model', ['getCars'])
+  components: { Loader },
+  data() {
+    return {
+      radioSelected: "Все модели"
+    };
   },
-  methods: {
-    selectCar(car) {
-      this.$store.dispatch('model/setCar', car)
+  computed: {
+    ...mapGetters("model", ["getCars", "getCarCategory"]),
+    ...mapGetters("shared", ["loading"]),
+    filteredCars() {
+      if (this.radioSelected === "Все модели") {
+        return this.getCars;
+      } else {
+        const filteredCars = this.getCars.filter(el => {
+          if (el.categoryId.name === this.radioSelected) {
+            return el;
+          }
+        });
+        return filteredCars;
+      }
     }
   },
   mounted() {
-    this.$store.dispatch('model/fetchModels')
+    this.$store.dispatch("model/fetchModels");
+  },
+  methods: {
+    selectCar(car) {
+      this.$store.dispatch("model/setCar", car);
+    },
+    defaultImage(e) {
+      e.target.src = "/images/default-car.jpg";
+    }
   }
 };
 </script>
 
-<style scoped lang="scss">
+<style lang="scss">
 .order__model {
   grid-area: 5 / 1 / 26 / 32;
   display: grid;
   grid-template-columns: repeat(32, 1fr);
   grid-template-rows: repeat(21, 1fr);
   border-right: 1px solid $main-light-gray;
+  position: relative;
 }
-  .model__car_class_switch {
-    grid-area: 1 / 3 / 4 / 26;
+.model__car_class_switch {
+  grid-area: 1 / 3 / 4 / 26;
+  display: flex;
+  align-items: center;
+  width: 100%;
+}
+.el-radio {
+  margin-bottom: 8px !important;
+}
+.el-radio__input {
+  margin-right: 8px !important;
+}
+.el-radio__label {
+  margin-right: 16px !important;
+  font-weight: 300;
+  font-size: 14px;
+  line-height: 16px;
+  cursor: pointer !important;
+  color: $main-gray;
+  margin-bottom: 8px;
+}
+.model__container {
+  grid-area: 4 / 3 / 22 / 26;
+  display: flex;
+  flex-wrap: wrap;
+  overflow: auto;
+}
+.model__loading {
+  display: flex;
+  align-self: center;
+  justify-self: center;
+}
+.model__car_card {
+  position: relative;
+  width: 50%;
+  height: 224px;
+  min-width: 250px;
+  border: 1px solid $main-light-gray;
+  cursor: pointer;
+  padding: 16px;
+  &:hover {
+    border: 1px solid $main-gray;
   }
-  .model__container {
-    grid-area: 4 / 3 / 22 / 26;
-    display: flex;
-    flex-wrap: wrap;
-    overflow: auto;
+  &:active {
+    border: 1px solid $main-green;
   }
-  .model__car_card {
-    position: relative;
-    width: 50%;
-    height: 224px;
-    min-width: 250px;
-    border: 1px solid $main-light-gray;
-    cursor: pointer;
-    padding: 16px;
-    &:hover {
-      border: 1px solid $main-gray;
-    }
-    &:active {
-      border: 1px solid $main-green;
-    }
-  }
-  .model__car_image {
-    width: 256px;
-    height: 116px;
-    right: 0;
-    bottom: 0;
-    position: absolute;
-  }
-  .model__car_name {
-    font-size: 18px;
-    line-height: 21px;
-    color: $main-black;
-  }
-  .model__car_cost {
-    font-size: 14px;
-    line-height: 16px;
-    color: $main-gray;
-  }
+}
+.model__car_image {
+  width: 256px;
+  height: 116px;
+  right: 0;
+  bottom: 0;
+  position: absolute;
+}
+.model__car_name {
+  font-size: 18px;
+  line-height: 21px;
+  color: $main-black;
+}
+.model__car_cost {
+  font-size: 14px;
+  line-height: 16px;
+  color: $main-gray;
+}
 div::-webkit-scrollbar {
   width: 0.7em;
 }

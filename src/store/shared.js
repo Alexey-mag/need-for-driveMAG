@@ -69,7 +69,7 @@ export default {
         name: "Location",
         tag: "Местоположение",
         isActive: true,
-        isDisabled: true,
+        isDisabled: false,
         buttonText: "Выбрать модель"
       },
       {
@@ -107,7 +107,7 @@ export default {
       if (state.currentComponent) {
         return state.currentComponent;
       } else {
-        return state.orderComponents[0]
+        return state.orderComponents[0];
       }
     },
     isMenuOpen(state) {
@@ -128,14 +128,16 @@ export default {
   },
   mutations: {
     setComponentStatus(state, payload) {
-      const components = state.orderComponents.map(el => {
-        if (el.id === payload.id) {
-          el.isDisabled = payload.isDisabled
-          return el
-        }
-        return el
-      })
-      state.orderComponents = components
+      if (payload.isDisabled === false) {
+        state.orderComponents[payload.id].isDisabled = false;
+      } else {
+        state.orderComponents.map(el => {
+          if (el.id > payload.id) {
+            el.isDisabled = true;
+            return el;
+          }
+        });
+      }
     },
     setCurrentComponent(state, payload) {
       const components = state.orderComponents.map(el => {
@@ -144,7 +146,7 @@ export default {
           state.currentComponent = el;
           return el;
         } else {
-          el.isActive = false
+          el.isActive = false;
           return el;
         }
       });
@@ -160,10 +162,27 @@ export default {
       state.isMapReady = payload;
     },
     toNextStep(state) {
-      let nextComponentId = {...state.currentComponent.id}
-      nextComponentId+=1
+      let nextComponentId;
+      if (state.currentComponent) {
+        nextComponentId = state.currentComponent.id;
+      } else {
+        nextComponentId = state.orderComponents[0].id;
+        state.currentComponent = state.orderComponents[0];
+      }
+      nextComponentId += 1;
       state.currentComponent = state.orderComponents.find(el => {
-        el.id = nextComponentId
+        if (el.id === nextComponentId) {
+          return el;
+        }
+      });
+      state.orderComponents.map(el => {
+        if (el.name === state.currentComponent.name) {
+          el.isActive = true;
+          return el;
+        } else {
+          el.isActive = false;
+          return el;
+        }
       })
     }
   },
@@ -174,11 +193,11 @@ export default {
     setCurrentComponent({ commit }, payload) {
       commit("setCurrentComponent", payload);
     },
-    setComponentStatus({commit}, payload) {
-      commit('setComponentStatus', payload)
+    setComponentStatus({ commit }, payload) {
+      commit("setComponentStatus", payload);
     },
-    toNextStep({commit}) {
-      commit('toNextStep')
+    toNextStep({ commit }) {
+      commit("toNextStep");
     }
   }
 };

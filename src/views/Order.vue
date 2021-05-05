@@ -5,70 +5,20 @@
     </div>
     <nav class="order__nav">
       <div class="order__steps">
-        <div
-          class="order__step__container"
-        >
+        <div class="order__step__container">
           <button
+            v-for="comp in orderComponents"
+            :key="comp.id"
             class="order__step"
+            :disabled="comp.isDisabled"
             :class="{
-              order__step_active: orderComponents[0].isActive,
-              order__step_disabled: orderComponents[0].isDisabled,
-              order__step_finished: !orderComponents[0].isDisabled
+              order__step_active: comp.isActive,
+              order__step_disabled: comp.isDisabled,
+              order__step_finished: !comp.isDisabled
             }"
-            @click="changeCurrentComponent(orderComponents[0])"
+            @click="changeCurrentComponent(comp)"
           >
-            {{ orderComponents[0].tag }}
-          </button>
-          <div class="order__arrow" />
-        </div>
-        <div
-                class="order__step__container"
-        >
-          <button
-                  class="order__step"
-                  :disabled="orderComponents[0].isDisabled"
-                  :class="{
-              order__step_active: orderComponents[1].isActive,
-              order__step_disabled: orderComponents[0].isDisabled,
-              order__step_finished: !orderComponents[0].isDisabled
-            }"
-                  @click="changeCurrentComponent(orderComponents[1])"
-          >
-            {{ orderComponents[1].tag }}
-          </button>
-          <div class="order__arrow" />
-        </div>
-        <div
-                class="order__step__container"
-        >
-          <button
-                  class="order__step"
-                  :disabled="orderComponents[1].isDisabled"
-                  :class="{
-              order__step_active: orderComponents[2].isActive,
-              order__step_disabled: orderComponents[1].isDisabled,
-              order__step_finished: !orderComponents[1].isDisabled
-            }"
-                  @click="changeCurrentComponent(orderComponents[2])"
-          >
-            {{ orderComponents[2].tag }}
-          </button>
-          <div class="order__arrow" />
-        </div>
-        <div
-                class="order__step__container"
-        >
-          <button
-                  class="order__step"
-                  :disabled="orderComponents[2].isDisabled"
-                  :class="{
-              order__step_active: orderComponents[3].isActive,
-              order__step_disabled: orderComponents[2].isDisabled,
-              order__step_finished: !orderComponents[2].isDisabled
-            }"
-                  @click="changeCurrentComponent(orderComponents[3])"
-          >
-            {{ orderComponents[3].tag }}
+            {{ comp.tag }}
           </button>
           <div class="order__arrow" />
         </div>
@@ -119,15 +69,15 @@ export default {
   },
   computed: {
     ...mapGetters("shared", ["orderComponents", "currentComponent"]),
-    ...mapGetters('order', ['getLocationStatus']),
-    ...mapGetters('model', ['getModelStatus'])
+    ...mapGetters("order", ["getLocationStatus"]),
+    ...mapGetters("model", ["getModelStatus"])
   },
   watch: {
     getLocationStatus(res) {
-      this.$store.dispatch('shared/setComponentStatus',res)
+      this.$store.dispatch("shared/setComponentStatus", res);
     },
     getModelStatus(res) {
-      this.$store.dispatch('shared/setComponentStatus',res)
+      this.$store.dispatch("shared/setComponentStatus", res);
     }
   }
 };

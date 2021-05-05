@@ -17,14 +17,14 @@
         @click="markerOnCenter(point)"
       />
     </yandex-map>
-    <Loader v-if="loading"/>
+    <Loader v-if="loading" />
   </div>
 </template>
 
 <script>
 import { yandexMap, ymapMarker } from "vue-yandex-maps";
 import { mapGetters } from "vuex";
-import Loader from '../Loader';
+import Loader from "../Loader";
 
 export default {
   name: "MapApp",
