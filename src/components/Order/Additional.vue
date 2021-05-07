@@ -2,55 +2,70 @@
   <div class="order__additional">
     <div v-if="getRates" class="additional__container">
       <div class="additional__form_block">
-      <p class="additional__label">Цвет</p>
-      <el-radio-group v-model="radioColorsSelected">
-        <el-radio
-          v-for="color in getCar.colors"
-          :key="color"
-          :label="color"
-        ></el-radio>
-      </el-radio-group>
+        <p class="additional__label">Цвет</p>
+        <el-radio-group v-model="radioColorsSelected">
+          <el-radio
+            v-for="color in getCar.colors"
+            :key="color"
+            :label="color"
+          ></el-radio>
+        </el-radio-group>
       </div>
       <div class="additional__form_block">
-      <p class="additional__label">Дата аренды</p>
-      <div class="additional__date_container">
-        <p class="additional__date_label">C</p>
-        <el-date-picker
-          v-model="dateFrom"
-          type="datetime"
-          editable
-          :clearable="true"
-          format="dd-MM-yyyy HH:mm"
-          placeholder="Введите дату и время"
-        >
-        </el-date-picker>
-      </div>
+        <p class="additional__label">Дата аренды</p>
         <div class="additional__date_container">
-        <p class="additional__date_label">По</p>
-        <el-date-picker
-          v-model="dateTo"
-          type="datetime"
-          editable
-          :clearable="true"
-          format="dd-MM-yyyy HH:mm"
-          placeholder="Введите дату и время"
-        >
-        </el-date-picker>
+          <p class="additional__date_label">C</p>
+          <el-date-picker
+            v-model="dateFrom"
+            :picker-options="optionsDateFrom"
+            type="datetime"
+            editable
+            :clearable="true"
+            format="dd-MM-yyyy HH:mm"
+            placeholder="Введите дату и время"
+            @change="calculateRent"
+          >
+          </el-date-picker>
+        </div>
+        <div class="additional__date_container">
+          <p class="additional__date_label">По</p>
+          <el-date-picker
+            v-model="dateTo"
+            :picker-options="optionsDateTo"
+            type="datetime"
+            editable
+            :clearable="true"
+            format="dd-MM-yyyy HH:mm"
+            placeholder="Введите дату и время"
+            @change="calculateRent"
+          >
+          </el-date-picker>
         </div>
       </div>
-        <div class="additional__form_block">
-          <p class="additional__label">Тариф</p>
-      <el-radio-group v-model="radioRateSelected">
-        <el-radio
-                v-for="rate in getRates"
-                :key="rate.id"
-                :label="rate.rateTypeId.name + ', ' +  rate.price + '₽/' + rate.rateTypeId.unit"
-        ></el-radio>
-      </el-radio-group>
-        </div>
+      <div class="additional__form_block">
+        <p class="additional__label">Тариф</p>
+        <el-radio-group v-model="radioRateSelected">
+          <el-radio
+            v-for="rate in getRates"
+            :key="rate.id"
+            :label="
+              rate.rateTypeId.name +
+                ', ' +
+                rate.price +
+                '₽/' +
+                rate.rateTypeId.unit
+            "
+          ></el-radio>
+        </el-radio-group>
+      </div>
       <div class="additional__form_block">
         <el-checkbox-group v-model="addOptions" class="additional__chechbox">
-          <el-checkbox v-for="opt in getOptions" :key="opt.name" :label="opt.name"></el-checkbox>
+          <el-checkbox
+            v-for="opt in getOptions"
+            :key="opt.name"
+            :label="opt.name"
+            >{{ opt.name + "," + opt.price + "₽" }}</el-checkbox
+          >
         </el-checkbox-group>
       </div>
     </div>
@@ -64,31 +79,130 @@ export default {
   data() {
     return {
       radioColorsSelected: "Любой",
-      radioRateSelected: '',
-      addOptions: [],
+      radioRateSelected: "На сутки, 1999₽/сутки",
+      addOptions: ["Полный бак"],
       dateTo: "",
-      dateFrom: ""
+      dateFrom: "",
+      optionsDateFrom: {
+        disabledDate: el => {
+          if (el < new Date().setHours(0, 0, 0, 0)) {
+            return true;
+          } else {
+            return false;
+          }
+        }
+      },
+      optionsDateTo: {
+        disabledDate: el => {
+          if (el < this.dateFrom) {
+            return true;
+          } else {
+            return false;
+          }
+        }
+      }
     };
   },
   computed: {
     ...mapGetters("model", ["getCar"]),
-    ...mapGetters('additional', ['getRates', 'getOptions', 'getRate'])
-  },
-  watch: {
-    radioColorsSelected(radio) {
-      this.$store.dispatch("model/setColor", radio);
+    ...mapGetters("additional", [
+      "getRates",
+      "getOptions",
+      "getRate",
+      "getPrice",
+      "getRentDuration"
+    ]),
+    rateTotal: {
+      get() {
+        return this.getPrice;
+      },
+      set(val) {
+        this.$store.dispatch("additional/setPrice", val);
+      }
     },
-    addOptions() {
-      this.$store.dispatch('additional/setOption', this.addOptions)
-    },
-    radioRateSelected() {
-      this.$store.dispatch('additional/setRate', this.radioRateSelected.split(',')[0])
+    rentDuration: {
+      get() {
+        return this.getRentDuration;
+      },
+      set(val) {
+        this.$store.dispatch("additional/setRentDuration", val);
+      }
     }
   },
-  methods: {
+  watch: {
+    radioColorsSelected() {
+      this.$store.dispatch("model/setColor", this.radioColorsSelected);
+    },
+    addOptions() {
+      this.$store.dispatch("additional/setOption", this.addOptions);
+    },
+    radioRateSelected() {
+      this.$store.dispatch(
+        "additional/setRate",
+        this.radioRateSelected.split(",")[0]
+      );
+      this.calculateRent();
+    },
+    dateTo() {
+      if (!this.dateTo) {
+        this.rentDuration = null;
+        this.rateTotal = null;
+      }
+    },
+    dateFrom() {
+      if (!this.dateFrom) {
+        this.rentDuration = null;
+        this.rateTotal = null;
+      }
+    }
   },
-  mounted() {
-    this.$store.dispatch("additional/fetchRates");
+  async mounted() {
+    await this.$store.dispatch("additional/fetchRates");
+    this.$store.dispatch(
+      "additional/setRate",
+      this.radioRateSelected.split(",")[0]
+    );
+    this.$store.dispatch("model/setColor", this.radioColorsSelected);
+  },
+  methods: {
+    calculateRent() {
+      if (this.dateFrom !== "" && this.dateTo !== "") {
+        const amount = this.dateTo - this.dateFrom;
+        if (amount < 0) {
+          this.rateTotal = null;
+          this.rentDuration = null;
+        } else {
+          switch (this.getRate.rateTypeId.unit) {
+            case "сутки": {
+              let units = Math.floor(amount / 1000 / 60 / 60 / 24);
+              if (units === 0) {
+                units = 1;
+              }
+              this.rentDuration = { units: units, name: "д" };
+              this.rateTotal = units * this.getRate.price;
+              break;
+            }
+            case "7 дней": {
+              let units = Math.floor(amount / 1000 / 60 / 60 / 24 / 7);
+              if (units === 0) {
+                units = 1;
+              }
+              this.rentDuration = { units: units, name: "нед" };
+              this.rateTotal = units * this.getRate.price;
+              break;
+            }
+            case "мин": {
+              const units = Math.floor(amount / 1000 / 60);
+              this.rentDuration = { units: units, name: "мин" };
+              this.rateTotal = units * this.getRate.price;
+              break;
+            }
+          }
+        }
+      } else {
+        return "not ready";
+      }
+    }
   }
 };
 </script>
@@ -103,41 +217,57 @@ export default {
 }
 .additional__container {
   grid-area: 2 / 3 / 16 / 11;
-  min-width: 300px;
+  min-width: 250px;
   display: flex;
   flex-direction: column;
 }
-  .additional__form_block {
-    margin-bottom: 32px;
-  }
-  .additional__label {
-    width: 100%;
-    margin-bottom: 16px;
-    font-weight: 300;
-    font-size: 14px;
-    line-height: 16px;
-  }
+.additional__form_block {
+  margin-bottom: 32px;
+  display: flex;
+  flex-direction: column;
+}
+.additional__label {
+  width: 100%;
+  margin-bottom: 16px;
+  font-weight: 300;
+  font-size: 14px;
+  line-height: 16px;
+}
 .additional__date_label {
   font-weight: 300;
   font-size: 14px;
   line-height: 16px;
   margin-right: 8px;
+  padding-bottom: 3px;
 }
-  .additional__date_container {
-    display: inline-flex;
-    align-items: flex-end;
-    right: 0;
-  }
-  .additional__chechbox {
-    display: flex;
-    flex-direction: column;
-  }
-  .el-checkbox__label {
-    font-weight: 300;
-    font-size: 14px;
-    line-height: 16px;
-    cursor: pointer !important;
-    color: $main-gray;
-    margin-bottom: 8px;
-  }
+.additional__date_container {
+  display: inline-flex;
+  align-items: flex-end;
+  right: 0;
+  padding-top: 10px;
+  margin-left: auto;
+}
+.additional__chechbox {
+  display: flex;
+  flex-direction: column;
+}
+.el-checkbox__label {
+  font-weight: 300;
+  font-size: 14px;
+  line-height: 16px;
+  cursor: pointer !important;
+  color: $main-gray;
+  margin-bottom: 8px;
+}
+.el-input__inner {
+  border: none;
+  height: 24px;
+  line-height: 24px;
+  border-radius: 0;
+  border-bottom: 1px solid $main-gray;
+  padding-left: 8px !important;
+}
+.el-input__prefix {
+  display: none !important;
+}
 </style>

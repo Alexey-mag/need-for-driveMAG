@@ -183,7 +183,7 @@ export default {
           el.isActive = false;
           return el;
         }
-      })
+      });
     }
   },
   actions: {

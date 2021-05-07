@@ -23,8 +23,30 @@
           {{ getColor }}
         </div>
       </div>
+      <div v-if="getRentDuration" class="price__menu_step">
+        <p class="price__menu_step__name">Длительность аренды</p>
+        <div class="price__dots"></div>
+        <div class="price__menu_step__value">
+          {{ getRentDuration.units }}{{ getRentDuration.name }}
+        </div>
+      </div>
+      <div v-if="getRate" class="price__menu_step">
+        <p class="price__menu_step__name">Тариф</p>
+        <div class="price__dots"></div>
+        <div class="price__menu_step__value">{{ getRate.rateTypeId.name }}</div>
+      </div>
+      <div v-for="opt in getOptions" :key="opt.name">
+        <div v-if="opt.optValue" class="price__menu_step">
+          <p class="price__menu_step__name">{{ opt.name }}</p>
+          <div class="price__dots"></div>
+          <div class="price__menu_step__value">Да</div>
+        </div>
+      </div>
       <div v-if="getCar" class="price__total">
-        <b>Цена:</b> от{{ getCar.priceMin }} до {{ getCar.priceMax }} ₽
+        <div v-if="getPrice"><b>Цена:</b>{{ getPrice }} ₽</div>
+        <div v-else>
+          <b>Цена:</b> от{{ getCar.priceMin }} до {{ getCar.priceMax }} ₽
+        </div>
       </div>
       <button
         class="price__button"
@@ -48,12 +70,16 @@ export default {
   computed: {
     ...mapGetters("order", ["getCity", "getPoint", "getPoints"]),
     ...mapGetters("model", ["getCar", "getColor"]),
-    ...mapGetters("shared", ["currentComponent", "orderComponents"])
+    ...mapGetters("shared", ["currentComponent", "orderComponents"]),
+    ...mapGetters("additional", [
+      "getRentDuration",
+      "getRate",
+      "getOptions",
+      "getPrice"
+    ])
   },
   methods: {
     toNextStep() {
-      // console.log(this.currentComponent);
-      // console.log(this.getCar);
       this.$store.dispatch("shared/toNextStep");
     }
   }
@@ -133,11 +159,11 @@ export default {
   text-align: right;
   color: $main-gray;
 }
-  .price__total {
-    margin-top: 32px;
-    margin-bottom: 32px;
-    font-weight: 500;
-    font-size: 16px;
-    line-height: 16px;
-  }
+.price__total {
+  margin-top: 32px;
+  margin-bottom: 32px;
+  font-weight: 500;
+  font-size: 16px;
+  line-height: 16px;
+}
 </style>

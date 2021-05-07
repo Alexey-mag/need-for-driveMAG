@@ -23,10 +23,6 @@
           <div class="order__arrow" />
         </div>
       </div>
-      <!--      <router-link :to="{ name: 'Location' }">Location /</router-link>-->
-      <!--      <router-link :to="{ name: 'Model' }">Model /</router-link>-->
-      <!--      <router-link :to="{ name: 'Additional' }">Additional /</router-link>-->
-      <!--      <router-link :to="{ name: 'Total' }">Total /</router-link>-->
     </nav>
     <keep-alive>
       <component
@@ -46,7 +42,6 @@
         v-if="currentComponent.name === orderComponents[3].name"
       ></component>
     </keep-alive>
-    <!--    <router-view></router-view>-->
     <Price />
   </div>
 </template>
@@ -62,15 +57,11 @@ import { mapGetters } from "vuex";
 export default {
   name: "Order",
   components: { Price, Location, Additional, Model, Total, HeaderApp },
-  methods: {
-    changeCurrentComponent(component) {
-      this.$store.dispatch("shared/setCurrentComponent", component);
-    }
-  },
   computed: {
     ...mapGetters("shared", ["orderComponents", "currentComponent"]),
     ...mapGetters("order", ["getLocationStatus"]),
-    ...mapGetters("model", ["getModelStatus"])
+    ...mapGetters("model", ["getModelStatus"]),
+    ...mapGetters("additional", ["getAdditionalStatus"])
   },
   watch: {
     getLocationStatus(res) {
@@ -78,6 +69,14 @@ export default {
     },
     getModelStatus(res) {
       this.$store.dispatch("shared/setComponentStatus", res);
+    },
+    getAdditionalStatus(res) {
+      this.$store.dispatch("shared/setComponentStatus", res);
+    }
+  },
+  methods: {
+    changeCurrentComponent(component) {
+      this.$store.dispatch("shared/setCurrentComponent", component);
     }
   }
 };

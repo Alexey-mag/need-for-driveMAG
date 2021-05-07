@@ -18,8 +18,9 @@ export default {
     getModelStatus(state) {
       if (state.car) {
         return { id: 2, isDisabled: false };
+      } else {
+        return { id: 2, isDisabled: true };
       }
-      return { id: 2, isDisabled: true };
     },
     getCarCategory(state) {
       return state.category;
