@@ -53,7 +53,7 @@ export default {
     };
   },
   computed: {
-    ...mapGetters("model", ["getCars", "getCarCategory"]),
+    ...mapGetters("model", ["getCars", "getCarCategory", 'getCar']),
     ...mapGetters("shared", ["loading"]),
     filteredCars() {
       if (this.radioSelected === "Все модели") {
@@ -66,6 +66,11 @@ export default {
         });
         return filteredCars;
       }
+    }
+  },
+  watch: {
+    getCar() {
+      this.$store.dispatch('additional/clearCarState')
     }
   },
   mounted() {

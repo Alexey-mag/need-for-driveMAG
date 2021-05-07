@@ -59,6 +59,7 @@
         </el-radio-group>
       </div>
       <div class="additional__form_block">
+        <p class="additional__label">Доп услуги</p>
         <el-checkbox-group v-model="addOptions" class="additional__chechbox">
           <el-checkbox
             v-for="opt in getOptions"
@@ -135,6 +136,7 @@ export default {
     },
     addOptions() {
       this.$store.dispatch("additional/setOption", this.addOptions);
+      this.calculateRent();
     },
     radioRateSelected() {
       this.$store.dispatch(
@@ -163,9 +165,16 @@ export default {
       this.radioRateSelected.split(",")[0]
     );
     this.$store.dispatch("model/setColor", this.radioColorsSelected);
+    this.$store.dispatch('additional/setOption', this.addOptions)
   },
   methods: {
     calculateRent() {
+      let adds = 0
+      this.getOptions.filter(el => {
+        if (el.optValue === true) {
+          adds += el.price
+        }
+      })
       if (this.dateFrom !== "" && this.dateTo !== "") {
         const amount = this.dateTo - this.dateFrom;
         if (amount < 0) {
@@ -179,22 +188,19 @@ export default {
                 units = 1;
               }
               this.rentDuration = { units: units, name: "д" };
-              this.rateTotal = units * this.getRate.price;
+              this.rateTotal = units * this.getRate.price + adds;
               break;
             }
             case "7 дней": {
-              let units = Math.floor(amount / 1000 / 60 / 60 / 24 / 7);
-              if (units === 0) {
-                units = 1;
-              }
+              let units = Math.ceil(amount / 1000 / 60 / 60 / 24 / 7);
               this.rentDuration = { units: units, name: "нед" };
-              this.rateTotal = units * this.getRate.price;
+              this.rateTotal = units * this.getRate.price + adds;
               break;
             }
             case "мин": {
               const units = Math.floor(amount / 1000 / 60);
               this.rentDuration = { units: units, name: "мин" };
-              this.rateTotal = units * this.getRate.price;
+              this.rateTotal = units * this.getRate.price + adds;
               break;
             }
           }

@@ -4,6 +4,7 @@ import shared from "./shared";
 import order from "./order";
 import model from "./model";
 import additional from "./additional";
+import total from './total'
 
 Vue.use(Vuex);
 
@@ -12,6 +13,7 @@ export default new Vuex.Store({
     shared,
     order,
     model,
-    additional
+    additional,
+    total
   }
 });

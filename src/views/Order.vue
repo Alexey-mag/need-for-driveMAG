@@ -78,6 +78,9 @@ export default {
     changeCurrentComponent(component) {
       this.$store.dispatch("shared/setCurrentComponent", component);
     }
+  },
+  mounted() {
+    this.$store.dispatch('total/fetchOrderStatus')
   }
 };
 </script>

@@ -62,6 +62,15 @@ export default {
     setRates(state, payload) {
       state.rates = payload;
     },
+    clearRate(state) {
+      state.rate = null
+    },
+    clearOptions(state) {
+      state.addOptions.map(el => {
+        el.optValue = false
+        return el
+      })
+    },
     setRate(state, payload) {
       state.rate = state.rates.find(el => {
         if (el.rateTypeId.name === payload) {
@@ -104,6 +113,13 @@ export default {
     },
     setRentDuration({ commit }, payload) {
       commit("setRentDuration", payload);
+    },
+    clearCarState({commit}) {
+      commit('clearRate')
+      commit('setRentDuration', null)
+      commit('setPrice', null)
+      this.commit('model/setColor', null)
+      commit('clearOptions')
     }
   }
 };
