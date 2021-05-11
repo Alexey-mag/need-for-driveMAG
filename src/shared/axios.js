@@ -7,6 +7,7 @@ axiosApi.interceptors.request.use(async config => {
     "X-Api-Factory-Application-Id": `${process.env["VUE_APP_API_FACTORY_ID"]}`,
     Accept: "application/json"
   };
+  config.baseURL = "https://api-factory.simbirsoft1.com";
   return config;
 });
 

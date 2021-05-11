@@ -49,38 +49,70 @@
         </div>
       </div>
       <button
+        v-if="getConfirmedOrder"
+        class="price__button price__button_cancel"
+        @click="reset"
+      >
+        Отменить
+      </button>
+      <button
+        v-else
         class="price__button"
-        :class="{
-          price__button_disabled:
-            orderComponents[currentComponent.id].isDisabled
-        }"
-        :disabled="orderComponents[currentComponent.id].isDisabled"
+        :class="buttonClass"
+        :disabled="buttonActive"
         @click="toNextStep"
       >
         {{ currentComponent.buttonText }}
       </button>
+      <DialogApp />
     </div>
   </div>
 </template>
 
 <script>
 import { mapGetters } from "vuex";
+import DialogApp from "@/components/Order/DialogApp";
 export default {
   name: "Price",
+  components: { DialogApp },
   computed: {
     ...mapGetters("order", ["getCity", "getPoint", "getPoints"]),
-    ...mapGetters("model", ["getCar", "getColor"]),
+    ...mapGetters("model", ["getCar"]),
     ...mapGetters("shared", ["currentComponent", "orderComponents"]),
     ...mapGetters("additional", [
       "getRentDuration",
       "getRate",
       "getOptions",
-      "getPrice"
-    ])
+      "getPrice",
+      "getColor"
+    ]),
+    ...mapGetters("total", ["getConfirmedOrder"]),
+    buttonActive() {
+      if (this.currentComponent.id === 4) {
+        return this.currentComponent.isDisabled;
+      } else {
+        return this.orderComponents[this.currentComponent.id].isDisabled;
+      }
+    },
+    buttonClass() {
+      if (this.currentComponent.id === 4) {
+        return {
+          price__button_disabled: this.currentComponent.isDisabled
+        };
+      } else {
+        return {
+          price__button_disabled: this.orderComponents[this.currentComponent.id]
+            .isDisabled
+        };
+      }
+    }
   },
   methods: {
     toNextStep() {
       this.$store.dispatch("shared/toNextStep");
+    },
+    reset() {
+      this.$store.dispatch("total/clearConfirmedOrder");
     }
   }
 };
@@ -124,6 +156,9 @@ export default {
   &:active {
     filter: brightness(0.8);
   }
+}
+.price__button_cancel {
+  background: linear-gradient(90deg, #493013 0%, #7b0c3b 100%) !important;
 }
 .price__button_disabled {
   background: $main-light-gray !important;

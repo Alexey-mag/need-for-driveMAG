@@ -86,20 +86,12 @@ export default {
       dateFrom: "",
       optionsDateFrom: {
         disabledDate: el => {
-          if (el < new Date().setHours(0, 0, 0, 0)) {
-            return true;
-          } else {
-            return false;
-          }
+          return el < new Date().setHours(0, 0, 0, 0)
         }
       },
       optionsDateTo: {
         disabledDate: el => {
-          if (el < this.dateFrom) {
-            return true;
-          } else {
-            return false;
-          }
+          return el < this.dateFrom
         }
       }
     };
@@ -131,8 +123,11 @@ export default {
     }
   },
   watch: {
+    getCar() {
+      this.radioColorsSelected = this.getCar.colors[0]
+    },
     radioColorsSelected() {
-      this.$store.dispatch("model/setColor", this.radioColorsSelected);
+      this.$store.dispatch("additional/setColor", this.radioColorsSelected);
     },
     addOptions() {
       this.$store.dispatch("additional/setOption", this.addOptions);
@@ -150,12 +145,14 @@ export default {
         this.rentDuration = null;
         this.rateTotal = null;
       }
+      this.$store.dispatch("additional/setDateTo", this.dateTo);
     },
     dateFrom() {
       if (!this.dateFrom) {
         this.rentDuration = null;
         this.rateTotal = null;
       }
+      this.$store.dispatch("additional/setDateFrom", this.dateFrom);
     }
   },
   async mounted() {
@@ -164,17 +161,17 @@ export default {
       "additional/setRate",
       this.radioRateSelected.split(",")[0]
     );
-    this.$store.dispatch("model/setColor", this.radioColorsSelected);
-    this.$store.dispatch('additional/setOption', this.addOptions)
+    this.$store.dispatch("additional/setColor", this.radioColorsSelected);
+    this.$store.dispatch("additional/setOption", this.addOptions);
   },
   methods: {
     calculateRent() {
-      let adds = 0
+      let adds = 0;
       this.getOptions.filter(el => {
         if (el.optValue === true) {
-          adds += el.price
+          adds += el.price;
         }
-      })
+      });
       if (this.dateFrom !== "" && this.dateTo !== "") {
         const amount = this.dateTo - this.dateFrom;
         if (amount < 0) {

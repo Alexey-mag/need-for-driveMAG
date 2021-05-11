@@ -5,6 +5,7 @@ export default {
     isBurgerActive: false,
     loading: false,
     isMapReady: false,
+    isDialogVisible: false,
     slides: [
       {
         id: 1,
@@ -124,12 +125,22 @@ export default {
     },
     mapStatus(state) {
       return state.isMapReady;
+    },
+    getDialogStatus(state) {
+      return state.isDialogVisible;
     }
   },
   mutations: {
+    setDialogStatus(state, payload) {
+      state.isDialogVisible = payload;
+    },
     setComponentStatus(state, payload) {
       if (payload.isDisabled === false) {
-        state.orderComponents[payload.id].isDisabled = false;
+        if (payload.id === 4) {
+          state.orderComponents[3].isDisabled = payload.isDisabled;
+        } else {
+          state.orderComponents[payload.id].isDisabled = false;
+        }
       } else {
         state.orderComponents.map(el => {
           if (el.id > payload.id) {
@@ -140,7 +151,7 @@ export default {
       }
     },
     setCurrentComponent(state, payload) {
-      const components = state.orderComponents.map(el => {
+      state.orderComponents.map(el => {
         if (el.name === payload.name) {
           el.isActive = true;
           state.currentComponent = el;
@@ -150,7 +161,6 @@ export default {
           return el;
         }
       });
-      state.orderComponents = components;
     },
     toggleBurgerMenu(state) {
       state.isBurgerActive = !state.isBurgerActive;
@@ -169,21 +179,25 @@ export default {
         nextComponentId = state.orderComponents[0].id;
         state.currentComponent = state.orderComponents[0];
       }
-      nextComponentId += 1;
-      state.currentComponent = state.orderComponents.find(el => {
-        if (el.id === nextComponentId) {
-          return el;
-        }
-      });
-      state.orderComponents.map(el => {
-        if (el.name === state.currentComponent.name) {
-          el.isActive = true;
-          return el;
-        } else {
-          el.isActive = false;
-          return el;
-        }
-      });
+      if (nextComponentId === 4) {
+        state.isDialogVisible = true;
+      } else {
+        nextComponentId += 1;
+        state.currentComponent = state.orderComponents.find(el => {
+          if (el.id === nextComponentId) {
+            return el;
+          }
+        });
+        state.orderComponents.map(el => {
+          if (el.name === state.currentComponent.name) {
+            el.isActive = true;
+            return el;
+          } else {
+            el.isActive = false;
+            return el;
+          }
+        });
+      }
     }
   },
   actions: {
@@ -198,6 +212,9 @@ export default {
     },
     toNextStep({ commit }) {
       commit("toNextStep");
+    },
+    setDialogStatus({ commit }, payload) {
+      commit("setDialogStatus", payload);
     }
   }
 };

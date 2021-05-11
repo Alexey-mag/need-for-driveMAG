@@ -53,24 +53,18 @@ export default {
     };
   },
   computed: {
-    ...mapGetters("model", ["getCars", "getCarCategory", 'getCar']),
+    ...mapGetters("model", ["getCars", "getCarCategory", "getCar"]),
     ...mapGetters("shared", ["loading"]),
     filteredCars() {
       if (this.radioSelected === "Все модели") {
         return this.getCars;
       } else {
-        const filteredCars = this.getCars.filter(el => {
+        return this.getCars.filter(el => {
           if (el.categoryId.name === this.radioSelected) {
             return el;
           }
         });
-        return filteredCars;
       }
-    }
-  },
-  watch: {
-    getCar() {
-      this.$store.dispatch('additional/clearCarState')
     }
   },
   mounted() {

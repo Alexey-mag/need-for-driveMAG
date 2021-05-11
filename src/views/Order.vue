@@ -4,11 +4,18 @@
       <HeaderApp />
     </div>
     <nav class="order__nav">
-      <div class="order__steps">
-        <div class="order__step__container">
+      <div v-if="getConfirmedOrder" class="order__steps">
+        <p class="order__order__number">
+          Заказ номер {{ getConfirmedOrder.id }}
+        </p>
+      </div>
+      <div v-else class="order__steps">
+        <div
+          v-for="comp in orderComponents"
+          :key="comp.id"
+          class="order__step__container"
+        >
           <button
-            v-for="comp in orderComponents"
-            :key="comp.id"
             class="order__step"
             :disabled="comp.isDisabled"
             :class="{
@@ -61,7 +68,8 @@ export default {
     ...mapGetters("shared", ["orderComponents", "currentComponent"]),
     ...mapGetters("order", ["getLocationStatus"]),
     ...mapGetters("model", ["getModelStatus"]),
-    ...mapGetters("additional", ["getAdditionalStatus"])
+    ...mapGetters("additional", ["getAdditionalStatus"]),
+    ...mapGetters("total", ["getConfirmedOrder"])
   },
   watch: {
     getLocationStatus(res) {
@@ -74,13 +82,13 @@ export default {
       this.$store.dispatch("shared/setComponentStatus", res);
     }
   },
+  mounted() {
+    this.$store.dispatch("total/fetchOrderStatus");
+  },
   methods: {
     changeCurrentComponent(component) {
       this.$store.dispatch("shared/setCurrentComponent", component);
     }
-  },
-  mounted() {
-    this.$store.dispatch('total/fetchOrderStatus')
   }
 };
 </script>
@@ -142,5 +150,10 @@ export default {
   height: 8px;
   width: 6px;
   background: url("~@/assets/order_arrow.svg");
+}
+.order__order__number {
+  font-weight: bold;
+  font-size: 14px;
+  line-height: 16px;
 }
 </style>
