@@ -86,20 +86,12 @@ export default {
       dateFrom: "",
       optionsDateFrom: {
         disabledDate: el => {
-          if (el < new Date().setHours(0, 0, 0, 0)) {
-            return true;
-          } else {
-            return false;
-          }
+          return el < new Date().setHours(0, 0, 0, 0)
         }
       },
       optionsDateTo: {
         disabledDate: el => {
-          if (el < this.dateFrom) {
-            return true;
-          } else {
-            return false;
-          }
+          return el < this.dateFrom
         }
       }
     };
