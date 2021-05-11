@@ -26,9 +26,15 @@ export default {
     rates: [],
     rate: null,
     price: null,
-    rentDuration: null
+    rentDuration: null,
+    dateTo: null,
+    dateFrom: null,
+    color: null
   },
   getters: {
+    getColor(state) {
+      return state.color;
+    },
     getRates(state) {
       return state.rates;
     },
@@ -45,7 +51,14 @@ export default {
       return state.rentDuration;
     },
     getAdditionalStatus(state) {
-      if (state.rate && state.price && state.rentDuration) {
+      if (
+        state.rate &&
+        state.price &&
+        state.rentDuration &&
+        state.dateFrom &&
+        state.dateTo &&
+        state.color
+      ) {
         return { id: 3, isDisabled: false };
       } else {
         return { id: 3, isDisabled: true };
@@ -53,6 +66,15 @@ export default {
     }
   },
   mutations: {
+    setColor(state, payload) {
+      state.color = payload;
+    },
+    setDateFrom(state, payload) {
+      state.dateFrom = payload;
+    },
+    setDateTo(state, payload) {
+      state.dateTo = payload;
+    },
     setRentDuration(state, payload) {
       state.rentDuration = payload;
     },
@@ -63,13 +85,13 @@ export default {
       state.rates = payload;
     },
     clearRate(state) {
-      state.rate = null
+      state.rate = null;
     },
     clearOptions(state) {
       state.addOptions.map(el => {
-        el.optValue = false
-        return el
-      })
+        el.optValue = false;
+        return el;
+      });
     },
     setRate(state, payload) {
       state.rate = state.rates.find(el => {
@@ -77,16 +99,19 @@ export default {
           return el;
         }
       });
+      this.commit("total/setRate", state.rate);
     },
     setOption(state, payload) {
       state.addOptions.map(el => {
-        if (payload.includes(el.name)) {
-          el.optValue = true;
-        } else {
-          el.optValue = false;
-        }
+        payload.includes(el.name) ? el.optValue = true : el.optValue = false
+        // if (payload.includes(el.name)) {
+        //   el.optValue = true;
+        // } else {
+        //   el.optValue = false;
+        // }
         return el;
       });
+      this.commit("total/setOptions", state.addOptions);
     }
   },
   actions: {
@@ -109,17 +134,23 @@ export default {
       commit("setOption", payload);
     },
     setPrice({ commit }, payload) {
+      this.commit("total/setPrice", payload);
       commit("setPrice", payload);
     },
     setRentDuration({ commit }, payload) {
       commit("setRentDuration", payload);
     },
-    clearCarState({commit}) {
-      commit('clearRate')
-      commit('setRentDuration', null)
-      commit('setPrice', null)
-      this.commit('model/setColor', null)
-      commit('clearOptions')
+    setDateFrom({ commit }, payload) {
+      commit("setDateFrom", payload);
+      this.commit("total/setDateFrom", payload);
+    },
+    setDateTo({ commit }, payload) {
+      commit("setDateTo", payload);
+      this.commit("total/setDateTo", payload);
+    },
+    setColor({ commit }, payload) {
+      this.commit("total/setColor", payload);
+      commit("setColor", payload);
     }
   }
 };

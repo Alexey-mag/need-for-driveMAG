@@ -4,7 +4,7 @@ import shared from "./shared";
 import order from "./order";
 import model from "./model";
 import additional from "./additional";
-import total from './total'
+import total from "./total";
 
 Vue.use(Vuex);
 

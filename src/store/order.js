@@ -88,8 +88,6 @@ export default {
             id: payload.id,
             coords: coords
           };
-          // context.commit('addCoordsToPoint', editedCoords)
-          // payload['coords'] = Object.values(pointCoords.pos.split(' '))
         })
         .catch(err => {
           throw err;
@@ -174,6 +172,8 @@ export default {
       });
     },
     async setPoint({ commit }, payload) {
+      this.commit("total/setCityId", payload);
+      this.commit("total/setPointId", payload);
       await commit("setPoint", payload);
     },
     clearCity({ commit }) {

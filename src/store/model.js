@@ -5,8 +5,7 @@ export default {
   state: {
     cars: [],
     car: null,
-    category: [],
-    color: null
+    category: []
   },
   getters: {
     getCars(state) {
@@ -24,9 +23,6 @@ export default {
     },
     getCarCategory(state) {
       return state.category;
-    },
-    getColor(state) {
-      return state.color;
     }
   },
   mutations: {
@@ -48,9 +44,6 @@ export default {
         payload.colors.unshift("Любой");
         state.car = payload;
       }
-    },
-    setColor(state, payload) {
-      state.color = payload;
     }
   },
   actions: {
@@ -69,10 +62,8 @@ export default {
         });
     },
     setCar({ commit }, payload) {
+      this.commit("total/setCarId", payload);
       commit("setCar", payload);
-    },
-    setColor({ commit }, payload) {
-      commit("setColor", payload);
     }
   }
 };

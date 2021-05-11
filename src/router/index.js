@@ -6,7 +6,6 @@ import Location from "../components/Order/Location/Location";
 import Model from "../components/Order/Model";
 import Additional from "../components/Order/Additional";
 import Total from "../components/Order/Total";
-import Price from "../components/Order/Price";
 
 Vue.use(VueRouter);
 const routes = [
