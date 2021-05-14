@@ -1,7 +1,7 @@
 <template>
   <div class="order">
     <div class="order__header">
-      <HeaderApp />
+      <header-app />
     </div>
     <nav class="order__nav">
       <div v-if="getConfirmedOrder" class="order__steps">
@@ -31,25 +31,15 @@
         </div>
       </div>
     </nav>
-    <keep-alive>
-      <component
-        :is="orderComponents[0].name"
-        v-if="currentComponent.name === orderComponents[0].name"
-      ></component>
-      <component
-        :is="orderComponents[1].name"
-        v-if="currentComponent.name === orderComponents[1].name"
-      ></component>
-      <component
-        :is="orderComponents[2].name"
-        v-if="currentComponent.name === orderComponents[2].name"
-      ></component>
-      <component
-        :is="orderComponents[3].name"
-        v-if="currentComponent.name === orderComponents[3].name"
-      ></component>
-    </keep-alive>
-    <Price />
+    <div v-for="comp of orderComponents" :key="comp.id" class="order__component_container">
+      <keep-alive>
+        <component
+                :is="comp.name"
+                v-if="currentComponent.name === comp.name"
+        ></component>
+      </keep-alive>
+    </div>
+    <price />
   </div>
 </template>
 
@@ -61,6 +51,7 @@ import Additional from "@/components/Order/Additional";
 import Total from "@/components/Order/Total";
 import HeaderApp from "@/components/HeaderApp";
 import { mapGetters } from "vuex";
+
 export default {
   name: "Order",
   components: { Price, Location, Additional, Model, Total, HeaderApp },
@@ -105,6 +96,13 @@ export default {
 }
 .order__header {
   grid-area: 2 / 3 / 3 / 42;
+}
+.order__component_container {
+  grid-area: 5 / 1 / 26 / 32;
+  display: grid;
+  grid-template-columns: repeat(32, 1fr);
+  grid-template-rows: repeat(21, 1fr);
+  border-right: 1px solid $main-light-gray;
 }
 .order__nav {
   grid-area: 4 / 1 / 5 / 44;

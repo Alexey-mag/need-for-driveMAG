@@ -67,16 +67,11 @@ export default {
   },
   actions: {
     async fetchOrderStatus({ commit }) {
-      await axiosApi({
-        url: "/api/db/orderStatus",
+      const {data} = await axiosApi({
+        url: "/orderStatus",
         method: "get"
       })
-        .then(resp => {
-          commit("setOrderId", resp.data.data[0]);
-        })
-        .catch(err => {
-          throw err;
-        });
+      commit("setOrderId", data.data[0]);
     },
     setCityId({ commit }, payload) {
       commit("setCityId", payload);
@@ -91,18 +86,13 @@ export default {
       commit("setColor", payload);
     },
     async pushOrder(context) {
-      const data = JSON.parse(JSON.stringify(context.state.order));
-      await axiosApi({
-        url: "/api/db/order",
+      const order = JSON.parse(JSON.stringify(context.state.order));
+      const {data} = await axiosApi({
+        url: "/order",
         method: "post",
-        data: data
+        data: order
       })
-        .then(response => {
-          context.commit("setOrder", response.data.data);
-        })
-        .catch(err => {
-          throw err;
-        });
+      context.commit("setOrder", data.data);
     },
     clearConfirmedOrder({ commit }) {
       commit("setOrder", null);

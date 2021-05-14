@@ -33,9 +33,6 @@
 export default {
   name: "AutocompleteCity",
   props: {
-    // clearPoint: {
-    //   type: Function
-    // },
     getItems: {
       type: Array,
       require: true

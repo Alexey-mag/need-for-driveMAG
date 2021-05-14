@@ -35,7 +35,7 @@
       </div>
     </div>
     <div class="model__loading">
-      <Loader v-if="loading" />
+      <loader v-if="loading" />
     </div>
   </div>
 </template>
@@ -83,11 +83,10 @@ export default {
 
 <style lang="scss">
 .order__model {
-  grid-area: 5 / 1 / 26 / 32;
+  grid-area: 1 / 1 / 22 / 33;
   display: grid;
   grid-template-columns: repeat(32, 1fr);
   grid-template-rows: repeat(21, 1fr);
-  border-right: 1px solid $main-light-gray;
   position: relative;
 }
 .model__car_class_switch {

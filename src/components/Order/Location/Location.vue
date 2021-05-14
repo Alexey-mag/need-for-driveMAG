@@ -28,9 +28,10 @@
 </template>
 
 <script>
-import { mapGetters, mapMutations } from "vuex";
+import { mapGetters } from "vuex";
 import AutocompleteCity from "@/components/Order/Location/AutocompleteCity";
 import MapApp from "@/components/Order/MapApp";
+
 export default {
   name: "Location",
   components: { MapApp, AutocompleteCity },
@@ -73,9 +74,6 @@ export default {
     },
     clearPoint() {
       this.$store.dispatch("order/clearPoint");
-    },
-    clearSearch() {
-      this.search = "";
     }
   }
 };
@@ -83,11 +81,10 @@ export default {
 
 <style scoped lang="scss">
 .location {
-  grid-area: 5 / 1 / 26 / 32;
+  grid-area: 1 / 1 / 22 / 33;
   display: grid;
   grid-template-columns: repeat(32, 1fr);
   grid-template-rows: repeat(21, 1fr);
-  border-right: 1px solid $main-light-gray;
 }
 .location__form_container {
   grid-area: 1 / 3 / 6 / 13;
@@ -100,6 +97,7 @@ export default {
   min-width: 370px;
 }
 .location__form {
+  margin-top: 16px;
   width: 100%;
   height: auto;
 }

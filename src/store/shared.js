@@ -105,11 +105,7 @@ export default {
       return state.orderComponents;
     },
     currentComponent(state) {
-      if (state.currentComponent) {
-        return state.currentComponent;
-      } else {
-        return state.orderComponents[0];
-      }
+      return state.currentComponent ? state.currentComponent : state.orderComponents[0]
     },
     isMenuOpen(state) {
       return state.isBurgerActive;
@@ -123,10 +119,10 @@ export default {
     loading(state) {
       return state.loading;
     },
-    mapStatus(state) {
+    isMapReady(state) {
       return state.isMapReady;
     },
-    getDialogStatus(state) {
+    isDialogVisible(state) {
       return state.isDialogVisible;
     }
   },
@@ -136,8 +132,8 @@ export default {
     },
     setComponentStatus(state, payload) {
       if (payload.isDisabled === false) {
-        if (payload.id === 4) {
-          state.orderComponents[3].isDisabled = payload.isDisabled;
+        if (payload.id === state.orderComponents.length) {
+          state.orderComponents[state.orderComponents.length -1].isDisabled = payload.isDisabled;
         } else {
           state.orderComponents[payload.id].isDisabled = false;
         }
@@ -179,7 +175,7 @@ export default {
         nextComponentId = state.orderComponents[0].id;
         state.currentComponent = state.orderComponents[0];
       }
-      if (nextComponentId === 4) {
+      if (nextComponentId === state.orderComponents.length) {
         state.isDialogVisible = true;
       } else {
         nextComponentId += 1;

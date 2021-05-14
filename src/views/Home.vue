@@ -1,7 +1,7 @@
 <template>
   <div class="home__container">
-    <MainPage />
-    <SliderVue />
+    <main-page />
+    <slider-vue />
   </div>
 </template>
 

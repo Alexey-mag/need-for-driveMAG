@@ -1,7 +1,7 @@
 <template>
   <div class="location__map__container">
     <yandex-map
-      v-if="mapStatus && getCity"
+      v-if="isMapReady && getCity"
       :settings="settings"
       :coords="coords"
       :zoom="zoom"
@@ -17,7 +17,7 @@
         @click="markerOnCenter(point)"
       />
     </yandex-map>
-    <Loader v-if="loading" />
+    <loader v-if="loading" />
   </div>
 </template>
 
@@ -51,7 +51,7 @@ export default {
   },
   computed: {
     ...mapGetters("order", ["getPoints", "getPoint", "getCity"]),
-    ...mapGetters("shared", ["loading", "mapStatus"]),
+    ...mapGetters("shared", ["loading", "isMapReady"]),
     coords() {
       return this.getPoint ? this.getPoint.coords : this.getCity.coords;
     }

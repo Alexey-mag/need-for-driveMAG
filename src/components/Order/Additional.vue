@@ -75,6 +75,7 @@
 
 <script>
 import { mapGetters } from "vuex";
+
 export default {
   name: "Additional",
   data() {
@@ -212,11 +213,10 @@ export default {
 
 <style lang="scss">
 .order__additional {
-  grid-area: 5 / 1 / 26 / 32;
+  grid-area: 1 / 1 / 22 / 33;
   display: grid;
   grid-template-columns: repeat(32, 1fr);
   grid-template-rows: repeat(21, 1fr);
-  border-right: 1px solid $main-light-gray;
 }
 .additional__container {
   grid-area: 2 / 3 / 16 / 11;
