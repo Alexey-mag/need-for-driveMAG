@@ -23,9 +23,7 @@
           class="total__img"
           alt=""
           :src="
-            'https://api-factory.simbirsoft1.com' +
-              getConfirmedOrder.carId.thumbnail.path
-          "
+            imgPath(getConfirmedOrder)"
           @error="defaultImage"
         />
       </div>
@@ -50,8 +48,7 @@
           class="total__img"
           alt=""
           :src="
-            'https://api-factory.simbirsoft1.com' +
-              getOrder.carId.thumbnail.path
+            imgPath(getOrder)
           "
           @error="defaultImage"
         />
@@ -68,6 +65,9 @@ export default {
     ...mapGetters("total", ["getOrder", "getConfirmedOrder"])
   },
   methods: {
+    imgPath(order) {
+      return `${process.env.VUE_APP_API_IMG}${order.carId.thumbnail.path}`
+    },
     defaultImage(e) {
       e.target.src = "/images/default-car.jpg";
     }

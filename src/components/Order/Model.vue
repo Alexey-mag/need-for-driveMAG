@@ -17,18 +17,14 @@
         @click="selectCar(car)"
       >
         <div class="model__car_name">
-          {{
-            car.name.toUpperCase().split(",")[1]
-              ? car.name.toUpperCase().split(",")[1]
-              : car.name
-          }}
+          {{ getCarName(car) }}
         </div>
         <div class="model__car_cost">
           {{ car.priceMin }} - {{ car.priceMax }} ₽
         </div>
         <img
           class="model__car_image"
-          :src="'https://api-factory.simbirsoft1.com' + car.thumbnail.path"
+          :src="imgPath(car)"
           alt=""
           @error="defaultImage"
         />
@@ -49,14 +45,14 @@ export default {
   components: { Loader },
   data() {
     return {
-      radioSelected: "Все модели"
+      radioSelected: ""
     };
   },
   computed: {
     ...mapGetters("model", ["getCars", "getCarCategory", "getCar"]),
     ...mapGetters("shared", ["loading"]),
     filteredCars() {
-      if (this.radioSelected === "Все модели") {
+      if (this.radioSelected === "Все модели" || this.radioSelected === "") {
         return this.getCars;
       } else {
         return this.getCars.filter(el => {
@@ -71,6 +67,14 @@ export default {
     this.$store.dispatch("model/fetchModels");
   },
   methods: {
+    imgPath(car) {
+      return `${process.env.VUE_APP_API_IMG}${car.thumbnail.path}`;
+    },
+    getCarName(car) {
+      return car.name.toUpperCase().split(",")[1]
+        ? car.name.toUpperCase().split(",")[1]
+        : car.name;
+    },
     selectCar(car) {
       this.$store.dispatch("model/setCar", car);
     },
@@ -95,21 +99,7 @@ export default {
   align-items: center;
   width: 100%;
 }
-.el-radio {
-  margin-bottom: 8px !important;
-}
-.el-radio__input {
-  margin-right: 8px !important;
-}
-.el-radio__label {
-  margin-right: 16px !important;
-  font-weight: 300;
-  font-size: 14px;
-  line-height: 16px;
-  cursor: pointer !important;
-  color: $main-gray;
-  margin-bottom: 8px;
-}
+
 .model__container {
   grid-area: 4 / 3 / 22 / 26;
   display: flex;

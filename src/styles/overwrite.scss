@@ -1,0 +1,31 @@
+.el-checkbox__label {
+  font-weight: 300;
+  font-size: 14px;
+  line-height: 16px;
+  cursor: pointer !important;
+  color: $main-gray;
+  margin-bottom: 8px;
+}
+.el-input__inner {
+  border: none;
+  height: 24px;
+  line-height: 24px;
+  border-radius: 0;
+  border-bottom: 1px solid $main-gray;
+  padding-left: 8px !important;
+}
+.el-input__prefix {
+  display: none !important;
+}
+.el-radio {
+  margin-bottom: 8px !important;
+}
+.el-radio__label {
+  margin-right: 16px !important;
+  font-weight: 300;
+  font-size: 14px;
+  line-height: 16px;
+  cursor: pointer !important;
+  color: $main-gray;
+  margin-bottom: 8px;
+}

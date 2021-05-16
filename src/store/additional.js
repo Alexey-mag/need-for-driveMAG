@@ -81,11 +81,7 @@ export default {
       state.rates = payload;
     },
     setRate(state, payload) {
-      state.rate = state.rates.find(el => {
-        if (el.rateTypeId.name === payload) {
-          return el;
-        }
-      });
+      state.rate = payload
       this.commit("total/setRate", state.rate);
     },
     setOption(state, payload) {
