@@ -4,7 +4,7 @@
       Need for drive
     </p>
     <div class="main__header__city" v-if="getCity">
-      <img :src="require('@/assets/main_map.svg')" alt="" />
+      <img class="header__img" :src="require('@/assets/main_map.svg')" alt="" />
       <!--      <img :src="require(../assets/${main_map.svg})" alt="" />-->
       <p class="main__text_city">
         {{ getCity ? getCity.name : "" }}
@@ -46,6 +46,10 @@ export default {
   line-height: 16px;
   color: $main-gray;
   margin-left: 6px;
+}
+.header__img {
+  width: 15px;
+  height: 18px;
 }
 // ---------------------------------568-------------------------------------
 @media screen and (max-width: $mobile) {
