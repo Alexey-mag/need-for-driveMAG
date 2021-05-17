@@ -17,46 +17,43 @@
         @click="selectCar(car)"
       >
         <div class="model__car_name">
-          {{
-            car.name.toUpperCase().split(",")[1]
-              ? car.name.toUpperCase().split(",")[1]
-              : car.name
-          }}
+          {{ getCarName(car) }}
         </div>
         <div class="model__car_cost">
           {{ car.priceMin }} - {{ car.priceMax }} ₽
         </div>
         <img
           class="model__car_image"
-          :src="'https://api-factory.simbirsoft1.com' + car.thumbnail.path"
+          :src="imgPath(car)"
           alt=""
           @error="defaultImage"
         />
       </div>
     </div>
     <div class="model__loading">
-      <Loader v-if="loading" />
+      <loader v-if="loading" />
     </div>
   </div>
 </template>
 
 <script>
-import { mapGetters } from "vuex";
+import { mapGetters, mapActions, mapMutations } from "vuex";
 import Loader from "../Loader";
+import defaultCar from "@/assets/default-car.jpg";
 
 export default {
   name: "Model",
   components: { Loader },
   data() {
     return {
-      radioSelected: "Все модели"
+      radioSelected: ""
     };
   },
   computed: {
     ...mapGetters("model", ["getCars", "getCarCategory", "getCar"]),
     ...mapGetters("shared", ["loading"]),
     filteredCars() {
-      if (this.radioSelected === "Все модели") {
+      if (this.radioSelected === "Все модели" || this.radioSelected === "") {
         return this.getCars;
       } else {
         return this.getCars.filter(el => {
@@ -68,14 +65,25 @@ export default {
     }
   },
   mounted() {
-    this.$store.dispatch("model/fetchModels");
+    this.fetchModels();
   },
   methods: {
+    ...mapActions("model", ["fetchModels", "setCar"]),
+    ...mapMutations("additional", ["setColor"]),
+    imgPath(car) {
+      return `${process.env.VUE_APP_API_IMG}${car.thumbnail.path}`;
+    },
+    getCarName(car) {
+      return car.name.toUpperCase().split(",")[1]
+        ? car.name.toUpperCase().split(",")[1]
+        : car.name;
+    },
     selectCar(car) {
-      this.$store.dispatch("model/setCar", car);
+      this.setColor("Любой");
+      this.setCar(car);
     },
     defaultImage(e) {
-      e.target.src = "/images/default-car.jpg";
+      e.target.src = defaultCar;
     }
   }
 };
@@ -83,11 +91,10 @@ export default {
 
 <style lang="scss">
 .order__model {
-  grid-area: 5 / 1 / 26 / 32;
+  grid-area: 1 / 1 / 22 / 33;
   display: grid;
   grid-template-columns: repeat(32, 1fr);
   grid-template-rows: repeat(21, 1fr);
-  border-right: 1px solid $main-light-gray;
   position: relative;
 }
 .model__car_class_switch {
@@ -96,21 +103,7 @@ export default {
   align-items: center;
   width: 100%;
 }
-.el-radio {
-  margin-bottom: 8px !important;
-}
-.el-radio__input {
-  margin-right: 8px !important;
-}
-.el-radio__label {
-  margin-right: 16px !important;
-  font-weight: 300;
-  font-size: 14px;
-  line-height: 16px;
-  cursor: pointer !important;
-  color: $main-gray;
-  margin-bottom: 8px;
-}
+
 .model__container {
   grid-area: 4 / 3 / 22 / 26;
   display: flex;

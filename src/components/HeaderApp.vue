@@ -3,8 +3,9 @@
     <p class="main__text_green">
       Need for drive
     </p>
-    <div class="main__header__city">
-      <img :src="'/images/main_map.svg'" alt="" />
+    <div class="main__header__city" v-if="getCity">
+      <img class="header__img" :src="require('@/assets/main_map.svg')" alt="" />
+      <!--      <img :src="require(../assets/${main_map.svg})" alt="" />-->
       <p class="main__text_city">
         {{ getCity ? getCity.name : "" }}
       </p>
@@ -14,6 +15,7 @@
 
 <script>
 import { mapGetters } from "vuex";
+
 export default {
   name: "HeaderApp",
   computed: {
@@ -44,6 +46,10 @@ export default {
   line-height: 16px;
   color: $main-gray;
   margin-left: 6px;
+}
+.header__img {
+  width: 15px;
+  height: 18px;
 }
 // ---------------------------------568-------------------------------------
 @media screen and (max-width: $mobile) {

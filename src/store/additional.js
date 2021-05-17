@@ -29,7 +29,8 @@ export default {
     rentDuration: null,
     dateTo: null,
     dateFrom: null,
-    color: null
+    color: null,
+    id: 3
   },
   getters: {
     getColor(state) {
@@ -51,18 +52,15 @@ export default {
       return state.rentDuration;
     },
     getAdditionalStatus(state) {
-      if (
+      const status = !(
         state.rate &&
         state.price &&
         state.rentDuration &&
         state.dateFrom &&
         state.dateTo &&
         state.color
-      ) {
-        return { id: 3, isDisabled: false };
-      } else {
-        return { id: 3, isDisabled: true };
-      }
+      );
+      return { id: state.id, isDisabled: status };
     }
   },
   mutations: {
@@ -84,31 +82,15 @@ export default {
     setRates(state, payload) {
       state.rates = payload;
     },
-    clearRate(state) {
-      state.rate = null;
-    },
-    clearOptions(state) {
-      state.addOptions.map(el => {
-        el.optValue = false;
-        return el;
-      });
-    },
     setRate(state, payload) {
-      state.rate = state.rates.find(el => {
-        if (el.rateTypeId.name === payload) {
-          return el;
-        }
-      });
+      state.rate = payload;
       this.commit("total/setRate", state.rate);
     },
     setOption(state, payload) {
       state.addOptions.map(el => {
-        payload.includes(el.name) ? el.optValue = true : el.optValue = false
-        // if (payload.includes(el.name)) {
-        //   el.optValue = true;
-        // } else {
-        //   el.optValue = false;
-        // }
+        payload.includes(el.name)
+          ? (el.optValue = true)
+          : (el.optValue = false);
         return el;
       });
       this.commit("total/setOptions", state.addOptions);
@@ -116,29 +98,22 @@ export default {
   },
   actions: {
     async fetchRates({ commit }) {
-      await axiosApi({
-        url: "/api/db/rate",
-        method: "get"
-      })
-        .then(resp => {
-          commit("setRates", resp.data.data);
-        })
-        .catch(err => {
-          throw err;
+      try {
+        const { data } = await axiosApi({
+          url: "/rate",
+          method: "get"
         });
+        commit("setRates", data.data);
+      } catch (e) {
+        throw e;
+      }
     },
     setRate({ commit }, payload) {
       commit("setRate", payload);
     },
-    setOption({ commit }, payload) {
-      commit("setOption", payload);
-    },
     setPrice({ commit }, payload) {
       this.commit("total/setPrice", payload);
       commit("setPrice", payload);
-    },
-    setRentDuration({ commit }, payload) {
-      commit("setRentDuration", payload);
     },
     setDateFrom({ commit }, payload) {
       commit("setDateFrom", payload);

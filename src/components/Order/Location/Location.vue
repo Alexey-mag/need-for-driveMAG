@@ -2,22 +2,42 @@
   <div class="location">
     <div class="location__form_container">
       <form name="order_form" class="location__form">
-        <autocomplete-city
-          :get-items="getCities"
-          :get-item.sync="city"
-          :label="labelCity"
-          placeholder="Начните вводить город..."
-          @setValue="setCity"
-          @clear="clearCity"
-        ></autocomplete-city>
-        <autocomplete-city
-          :label="labelPoint"
-          :get-items="getPoints"
-          :get-item.sync="point"
-          placeholder="Начните вводить пункт выдачи..."
-          @setValue="setPoint"
-          @clear="clearPoint"
-        ></autocomplete-city>
+        <div class="location__form_block">
+          <div class="location__autocomplete_label">Город</div>
+          <el-autocomplete
+            v-model="city"
+            class="inline-input"
+            :fetch-suggestions="searchCities"
+            value-key="name"
+            placeholder="Начните вводить город..."
+            @select="selectCity"
+          >
+            <i
+              v-show="city"
+              slot="suffix"
+              class="form__clear"
+              @click="clearIconCity"
+            ></i>
+          </el-autocomplete>
+        </div>
+        <div class="location__form_block">
+          <div class="location__autocomplete_label">Пункт Выдачи</div>
+          <el-autocomplete
+            v-model="point"
+            class="inline-input"
+            :fetch-suggestions="searchPoints"
+            value-key="name"
+            placeholder="Начните вводить пункт выдачи..."
+            @select="selectPoint"
+          >
+            <i
+              v-show="point"
+              slot="suffix"
+              class="form__clear"
+              @click="clearIconPoint"
+            ></i>
+          </el-autocomplete>
+        </div>
       </form>
       <span>Выбрать на карте</span>
     </div>
@@ -28,54 +48,67 @@
 </template>
 
 <script>
-import { mapGetters, mapMutations } from "vuex";
-import AutocompleteCity from "@/components/Order/Location/AutocompleteCity";
+import { mapGetters, mapActions, mapMutations } from "vuex";
 import MapApp from "@/components/Order/MapApp";
+
 export default {
   name: "Location",
-  components: { MapApp, AutocompleteCity },
+  components: { MapApp },
   data() {
     return {
       labelCity: "Город",
       labelPoint: "Пункт Выдачи",
       filteredCities: [],
-      toggle: false
+      toggle: false,
+      city: "",
+      point: ""
     };
   },
   computed: {
-    ...mapGetters("order", ["getCities", "getPoints", "getCity", "getPoint"]),
-    city: {
-      get() {
-        return this.getCity;
-      },
-      set(value) {
-        this.$store.dispatch("order/setCity", value);
-      }
-    },
-    point: {
-      get() {
-        return this.getPoint;
-      },
-      set(value) {
-        this.$store.dispatch("order/setPoint", value);
+    ...mapGetters("order", ["getCities", "getPoints", "getCity", "getPoint"])
+  },
+  watch: {
+    getPoint() {
+      if (this.getPoint) {
+        this.point = this.getPoint.name;
       }
     }
   },
   methods: {
-    setCity(val) {
-      this.$store.dispatch("order/setCity", val);
+    ...mapActions("order", ["setCity", "setPoint"]),
+    ...mapMutations("order", ["clearCity", "clearPoint"]),
+    selectCity(val) {
+      this.point = "";
+      this.setCity(val);
     },
-    setPoint(val) {
-      this.$store.dispatch("order/setPoint", val);
+    selectPoint(val) {
+      this.setPoint(val);
     },
-    clearCity() {
-      this.$store.dispatch("order/clearCity");
+    clearIconCity() {
+      this.point = "";
+      this.city = "";
+      this.clearCity();
     },
-    clearPoint() {
-      this.$store.dispatch("order/clearPoint");
+    clearIconPoint() {
+      this.point = "";
+      this.clearPoint();
     },
-    clearSearch() {
-      this.search = "";
+    searchCities(queryString, cb) {
+      const results = queryString
+        ? this.getCities.filter(this.createFilter(queryString))
+        : this.getCities;
+      cb(results);
+    },
+    searchPoints(queryString, cb) {
+      const results = queryString
+        ? this.getPoints.filter(this.createFilter(queryString))
+        : this.getPoints;
+      cb(results);
+    },
+    createFilter(queryString) {
+      return link => {
+        return link.name.toLowerCase().indexOf(queryString.toLowerCase()) === 0;
+      };
     }
   }
 };
@@ -83,11 +116,10 @@ export default {
 
 <style scoped lang="scss">
 .location {
-  grid-area: 5 / 1 / 26 / 32;
+  grid-area: 1 / 1 / 22 / 33;
   display: grid;
   grid-template-columns: repeat(32, 1fr);
   grid-template-rows: repeat(21, 1fr);
-  border-right: 1px solid $main-light-gray;
 }
 .location__form_container {
   grid-area: 1 / 3 / 6 / 13;
@@ -97,14 +129,26 @@ export default {
   justify-content: space-between;
   align-items: center;
   width: 100%;
-  min-width: 370px;
+  min-width: 325px;
 }
 .location__form {
-  width: 100%;
+  margin-top: 16px;
   height: auto;
+  width: 325px;
 }
 .location__map {
   grid-area: 6 / 3 / 17 / 26;
   position: relative;
+}
+.location__autocomplete_label {
+  font-weight: 300;
+  font-size: 14px;
+  line-height: 16px;
+  margin-right: 8px;
+  margin-top: 5px;
+  margin-left: auto;
+}
+.location__form_block {
+  display: flex;
 }
 </style>

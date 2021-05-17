@@ -30,6 +30,7 @@
 
 <script>
 import HeaderApp from "@/components/HeaderApp";
+
 export default {
   name: "MainPage",
   components: { HeaderApp }

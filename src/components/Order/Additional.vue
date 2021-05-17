@@ -8,6 +8,7 @@
             v-for="color in getCar.colors"
             :key="color"
             :label="color"
+            @change="setStoreColor(color)"
           ></el-radio>
         </el-radio-group>
       </div>
@@ -21,9 +22,10 @@
             type="datetime"
             editable
             :clearable="true"
+            clear-icon="form__clear"
             format="dd-MM-yyyy HH:mm"
             placeholder="Введите дату и время"
-            @change="calculateRent"
+            @change="setStoreDateFrom"
           >
           </el-date-picker>
         </div>
@@ -35,9 +37,10 @@
             type="datetime"
             editable
             :clearable="true"
+            clear-icon="form__clear"
             format="dd-MM-yyyy HH:mm"
             placeholder="Введите дату и время"
-            @change="calculateRent"
+            @change="setStoreDateTo"
           >
           </el-date-picker>
         </div>
@@ -48,24 +51,21 @@
           <el-radio
             v-for="rate in getRates"
             :key="rate.id"
-            :label="
-              rate.rateTypeId.name +
-                ', ' +
-                rate.price +
-                '₽/' +
-                rate.rateTypeId.unit
-            "
-          ></el-radio>
+            :label="rate.rateTypeId.name"
+            @change="setStoreRate(rate)"
+            >{{ rateRadioLabel(rate) }}</el-radio
+          >
         </el-radio-group>
       </div>
       <div class="additional__form_block">
         <p class="additional__label">Доп услуги</p>
-        <el-checkbox-group v-model="addOptions" class="additional__chechbox">
+        <el-checkbox-group v-model="addOptions" class="additional__checkbox">
           <el-checkbox
             v-for="opt in getOptions"
             :key="opt.name"
             :label="opt.name"
-            >{{ opt.name + "," + opt.price + "₽" }}</el-checkbox
+            @change="setStoreOptions()"
+            >{{ optionCheckboxLabel(opt) }}</el-checkbox
           >
         </el-checkbox-group>
       </div>
@@ -74,24 +74,25 @@
 </template>
 
 <script>
-import { mapGetters } from "vuex";
+import { mapGetters, mapActions, mapMutations } from "vuex";
+
 export default {
   name: "Additional",
   data() {
     return {
-      radioColorsSelected: "Любой",
-      radioRateSelected: "На сутки, 1999₽/сутки",
-      addOptions: ["Полный бак"],
+      radioColorsSelected: "",
+      addOptions: [],
+      radioRateSelected: "",
       dateTo: "",
       dateFrom: "",
       optionsDateFrom: {
         disabledDate: el => {
-          return el < new Date().setHours(0, 0, 0, 0)
+          return el < new Date().setHours(0, 0, 0, 0);
         }
       },
       optionsDateTo: {
         disabledDate: el => {
-          return el < this.dateFrom
+          return el < this.dateFrom;
         }
       }
     };
@@ -110,7 +111,7 @@ export default {
         return this.getPrice;
       },
       set(val) {
-        this.$store.dispatch("additional/setPrice", val);
+        this.setPrice(val);
       }
     },
     rentDuration: {
@@ -118,53 +119,68 @@ export default {
         return this.getRentDuration;
       },
       set(val) {
-        this.$store.dispatch("additional/setRentDuration", val);
+        this.setRentDuration(val);
       }
     }
   },
   watch: {
     getCar() {
-      this.radioColorsSelected = this.getCar.colors[0]
-    },
-    radioColorsSelected() {
-      this.$store.dispatch("additional/setColor", this.radioColorsSelected);
-    },
-    addOptions() {
-      this.$store.dispatch("additional/setOption", this.addOptions);
-      this.calculateRent();
-    },
-    radioRateSelected() {
-      this.$store.dispatch(
-        "additional/setRate",
-        this.radioRateSelected.split(",")[0]
-      );
-      this.calculateRent();
-    },
-    dateTo() {
+      this.radioColorsSelected = this.getCar.colors[0];
+    }
+  },
+  mounted() {
+    this.fetchRates();
+  },
+  methods: {
+    ...mapActions("additional", [
+      "setPrice",
+      "fetchRates",
+      "setDateTo",
+      "setDateFrom",
+      "setColor"
+    ]),
+    ...mapMutations("additional", ["setRentDuration", "setOption", "setRate"]),
+    setStoreDateTo() {
       if (!this.dateTo) {
         this.rentDuration = null;
         this.rateTotal = null;
       }
-      this.$store.dispatch("additional/setDateTo", this.dateTo);
+      this.setDateTo(this.dateTo);
+      if (this.radioRateSelected && this.dateFrom && this.dateTo) {
+        this.calculateRent();
+      }
     },
-    dateFrom() {
+    setStoreDateFrom() {
       if (!this.dateFrom) {
         this.rentDuration = null;
         this.rateTotal = null;
       }
-      this.$store.dispatch("additional/setDateFrom", this.dateFrom);
-    }
-  },
-  async mounted() {
-    await this.$store.dispatch("additional/fetchRates");
-    this.$store.dispatch(
-      "additional/setRate",
-      this.radioRateSelected.split(",")[0]
-    );
-    this.$store.dispatch("additional/setColor", this.radioColorsSelected);
-    this.$store.dispatch("additional/setOption", this.addOptions);
-  },
-  methods: {
+      this.setDateFrom(this.dateFrom);
+      if (this.radioRateSelected && this.dateFrom && this.dateTo) {
+        this.calculateRent();
+      }
+    },
+    setStoreOptions() {
+      this.setOption(this.addOptions);
+      if (this.radioRateSelected && this.dateFrom && this.dateTo) {
+        this.calculateRent();
+      }
+    },
+    setStoreColor(color) {
+      this.setColor(color);
+    },
+    setStoreRate(rate) {
+      this.setRate(rate);
+      if (this.radioRateSelected && this.dateFrom && this.dateTo) {
+        this.calculateRent();
+      }
+    },
+    rateRadioLabel(rate) {
+      return `${rate.rateTypeId.name}, ${rate.price} ₽/${rate.rateTypeId.unit}`;
+    },
+    optionCheckboxLabel(opt) {
+      return `${opt.name},${opt.price}₽`;
+    },
     calculateRent() {
       let adds = 0;
       this.getOptions.filter(el => {
@@ -202,8 +218,6 @@ export default {
             }
           }
         }
-      } else {
-        return "not ready";
       }
     }
   }
@@ -212,11 +226,10 @@ export default {
 
 <style lang="scss">
 .order__additional {
-  grid-area: 5 / 1 / 26 / 32;
+  grid-area: 1 / 1 / 22 / 33;
   display: grid;
   grid-template-columns: repeat(32, 1fr);
   grid-template-rows: repeat(21, 1fr);
-  border-right: 1px solid $main-light-gray;
 }
 .additional__container {
   grid-area: 2 / 3 / 16 / 11;
@@ -250,27 +263,8 @@ export default {
   padding-top: 10px;
   margin-left: auto;
 }
-.additional__chechbox {
+.additional__checkbox {
   display: flex;
   flex-direction: column;
-}
-.el-checkbox__label {
-  font-weight: 300;
-  font-size: 14px;
-  line-height: 16px;
-  cursor: pointer !important;
-  color: $main-gray;
-  margin-bottom: 8px;
-}
-.el-input__inner {
-  border: none;
-  height: 24px;
-  line-height: 24px;
-  border-radius: 0;
-  border-bottom: 1px solid $main-gray;
-  padding-left: 8px !important;
-}
-.el-input__prefix {
-  display: none !important;
 }
 </style>

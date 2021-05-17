@@ -1,7 +1,7 @@
 <template>
   <div class="location__map__container">
     <yandex-map
-      v-if="mapStatus && getCity"
+      v-if="isMapReady && getCity"
       :settings="settings"
       :coords="coords"
       :zoom="zoom"
@@ -17,13 +17,13 @@
         @click="markerOnCenter(point)"
       />
     </yandex-map>
-    <Loader v-if="loading" />
+    <loader v-if="loading" />
   </div>
 </template>
 
 <script>
 import { yandexMap, ymapMarker } from "vue-yandex-maps";
-import { mapGetters } from "vuex";
+import { mapGetters, mapActions } from "vuex";
 import Loader from "../Loader";
 
 export default {
@@ -43,26 +43,20 @@ export default {
         imageHref: "/images/map_marker.svg",
         imageSize: [18, 18],
         imageOffset: [0, 0]
-        // content: this.address,
-        // contentOffset: [0, 15],
-        // contentLayout: '<div style="background: red; width: 50px; color: #FFFFFF; font-weight: bold;">$[properties.iconContent]</div>'
       }
     };
   },
   computed: {
     ...mapGetters("order", ["getPoints", "getPoint", "getCity"]),
-    ...mapGetters("shared", ["loading", "mapStatus"]),
+    ...mapGetters("shared", ["loading", "isMapReady"]),
     coords() {
       return this.getPoint ? this.getPoint.coords : this.getCity.coords;
     }
-    // zoom() {
-    //     return this.getPoint ? 17 : 12
-    // }
   },
   methods: {
+    ...mapActions("order", ["setPoint"]),
     markerOnCenter(point) {
-      this.$store.dispatch("order/setPoint", point);
-      // this.zoom = 17
+      this.setPoint(point);
     }
   }
 };

@@ -6,6 +6,7 @@
 
 <script>
 import DefaultLayout from "@/layouts/DefaultLayout";
+import { mapActions } from "vuex";
 
 export default {
   name: "App",
@@ -18,7 +19,10 @@ export default {
     };
   },
   mounted() {
-    this.$store.dispatch("order/fetchCity");
+    this.fetchCity();
+  },
+  methods: {
+    ...mapActions("order", ["fetchCity"])
   }
 };
 </script>

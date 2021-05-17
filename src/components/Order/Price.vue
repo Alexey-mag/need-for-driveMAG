@@ -64,7 +64,7 @@
       >
         {{ currentComponent.buttonText }}
       </button>
-      <DialogApp />
+      <dialog-app />
     </div>
   </div>
 </template>
@@ -72,6 +72,7 @@
 <script>
 import { mapGetters } from "vuex";
 import DialogApp from "@/components/Order/DialogApp";
+
 export default {
   name: "Price",
   components: { DialogApp },

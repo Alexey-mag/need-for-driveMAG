@@ -5,7 +5,8 @@ export default {
   state: {
     cars: [],
     car: null,
-    category: []
+    category: [],
+    id: 2
   },
   getters: {
     getCars(state) {
@@ -15,11 +16,8 @@ export default {
       return state.car;
     },
     getModelStatus(state) {
-      if (state.car) {
-        return { id: 2, isDisabled: false };
-      } else {
-        return { id: 2, isDisabled: true };
-      }
+      const status = !state.car;
+      return { id: state.id, isDisabled: status };
     },
     getCarCategory(state) {
       return state.category;
@@ -49,17 +47,17 @@ export default {
   actions: {
     async fetchModels(context) {
       this.commit("shared/setLoading", true);
-      await axiosApi({
-        url: "/api/db/car",
-        method: "get"
-      })
-        .then(response => {
-          context.commit("setCars", response.data.data);
-          this.commit("shared/setLoading", false);
-        })
-        .catch(err => {
-          throw err;
+      try {
+        const { data } = await axiosApi({
+          url: "/car",
+          method: "get"
         });
+        context.commit("setCars", data.data);
+        this.commit("shared/setLoading", false);
+      } catch (e) {
+        this.commit("shared/setLoading", false);
+        throw e;
+      }
     },
     setCar({ commit }, payload) {
       this.commit("total/setCarId", payload);

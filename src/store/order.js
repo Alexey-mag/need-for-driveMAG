@@ -6,7 +6,8 @@ export default {
     cities: [],
     currentCity: null,
     currentPoint: null,
-    currentCityPoints: []
+    currentCityPoints: [],
+    id: 1
   },
   getters: {
     getCities(state) {
@@ -22,10 +23,8 @@ export default {
       return state.currentPoint;
     },
     getLocationStatus(state) {
-      if (state.currentCity && state.currentPoint) {
-        return { id: 1, isDisabled: false };
-      }
-      return { id: 1, isDisabled: true };
+      const status = !(state.currentCity && state.currentPoint);
+      return { id: state.id, isDisabled: status };
     }
   },
   mutations: {
@@ -51,18 +50,10 @@ export default {
     setPoint(state, payload) {
       state.currentPoint = payload;
     },
-    addCoordsToPoint(state, payload) {
-      state.currentCityPoints.map(el => {
-        if (el.id === payload.id) {
-          el.coords = payload.coords;
-          return el;
-        }
-        return el;
-      });
-    },
     clearCity(state) {
       state.currentCity = null;
       state.currentPoint = null;
+      state.currentCityPoints = [];
     },
     clearPoint(state) {
       state.currentPoint = null;
@@ -70,117 +61,91 @@ export default {
   },
   actions: {
     async fetchPointCoords(context, payload) {
-      let editedCoords = {};
-      const pointsWithCoords = await axiosApi({
-        url:
-          "https://geocode-maps.yandex.ru/1.x/?apikey=a77bd471-3a16-4a8c-8604-aa8285380d79&format=json&geocode=" +
-          payload.cityId.name +
-          "+" +
-          payload.address,
-        method: "get"
-      })
-        .then(response => {
-          const pointCoords =
-            response.data.response.GeoObjectCollection.featureMember[0]
-              .GeoObject.Point;
-          const coords = Object.values(pointCoords.pos.split(" "));
-          editedCoords = {
-            id: payload.id,
-            coords: coords
-          };
-        })
-        .catch(err => {
-          throw err;
+      try {
+        const { data } = await axiosApi({
+          url: process.env.VUE_APP_API_YANDEX_GEO,
+          method: "get",
+          params: {
+            apikey: process.env.VUE_APP_API_YANDEX_KEY,
+            format: "json",
+            geocode: payload.cityId.name + payload.address
+          }
         });
-      await Promise.resolve(pointsWithCoords)
-        .then(() => {
-          this.commit("order/addCoordsToPoint", editedCoords);
-        })
-        .catch(err => {
-          throw err;
-        });
+        const pointCoords =
+          data.response.GeoObjectCollection?.featureMember?.[0]?.GeoObject
+            ?.Point;
+        payload["coords"] = Object.values(pointCoords.pos.split(" "));
+      } catch (e) {
+        throw e;
+      }
     },
     async fetchCityCoords(context, payload) {
-      let cityForMapComponent = null;
-      const cityWithCoords = await axiosApi({
-        url:
-          "https://geocode-maps.yandex.ru/1.x/?apikey=a77bd471-3a16-4a8c-8604-aa8285380d79&format=json&geocode=" +
-          payload.name,
-        method: "get"
-      })
-        .then(response => {
-          const pointCoords =
-            response.data.response.GeoObjectCollection.featureMember[0]
-              .GeoObject.Point;
-          payload["coords"] = Object.values(pointCoords.pos.split(" "));
-          cityForMapComponent = payload;
-        })
-        .catch(err => {
-          throw err;
+      try {
+        const { data } = await axiosApi({
+          url: process.env.VUE_APP_API_YANDEX_GEO,
+          method: "get",
+          params: {
+            apikey: process.env.VUE_APP_API_YANDEX_KEY,
+            format: "json",
+            geocode: payload.name
+          }
         });
-      await Promise.resolve(cityWithCoords)
-        .then(() => {
-          this.commit("order/setCity", cityForMapComponent);
-        })
-        .catch(err => {
-          throw err;
-        });
+        const pointCoords =
+          data.response.GeoObjectCollection?.featureMember?.[0]?.GeoObject
+            ?.Point;
+        payload["coords"] = Object.values(pointCoords.pos.split(" "));
+        this.commit("order/setCity", payload);
+      } catch (error) {
+        throw error;
+      }
     },
     async fetchCity(context) {
-      await axiosApi({
-        url: "/api/db/city",
-        method: "get"
-      })
-        .then(response => {
-          context.commit("setCities", response.data.data);
-        })
-        .catch(err => {
-          throw err;
+      try {
+        const { data } = await axiosApi({
+          url: "/city",
+          method: "get"
         });
+        context.commit("setCities", data.data);
+      } catch (e) {
+        throw e;
+      }
     },
     async fetchCurrentCityPoints(context, payload) {
-      await axiosApi({
-        url: "/api/db/point?cityId=" + payload,
-        method: "get"
-      })
-        .then(response => {
-          context.commit("setCityPoints", response.data.data);
-        })
-        .catch(err => {
-          throw err;
+      try {
+        const { data } = await axiosApi({
+          url: "/point?cityId=" + payload,
+          method: "get"
         });
+        context.commit("setCityPoints", data.data);
+      } catch (e) {
+        throw e;
+      }
     },
     async setCity(context, payload) {
       this.commit("shared/setLoading", true);
-      await context.dispatch("fetchCityCoords", payload);
-      await axiosApi({
-        url: "/api/db/point?cityId=" + payload.id,
-        method: "get"
-      })
-        .then(response => {
-          context.commit("setPoints", response.data.data);
-        })
-        .catch(err => {
-          throw err;
+      try {
+        await context.dispatch("fetchCityCoords", payload);
+        const { data } = await axiosApi({
+          url: "/point?cityId=" + payload.id,
+          method: "get"
         });
-      const pointsWithCoords = await context.getters.getPoints.map(el => {
-        return context.dispatch("fetchPointCoords", el);
-      });
-      Promise.all(pointsWithCoords).then(() => {
+        context.commit("setPoints", data.data);
+        const pointsWithCoords = await context.getters.getPoints.map(el => {
+          return context.dispatch("fetchPointCoords", el);
+        });
+        Promise.all(pointsWithCoords).then(() => {
+          this.commit("shared/setLoading", false);
+          this.commit("shared/setMapStatus", true);
+        });
+      } catch (e) {
         this.commit("shared/setLoading", false);
-        this.commit("shared/setMapStatus", true);
-      });
+        throw e;
+      }
     },
     async setPoint({ commit }, payload) {
       this.commit("total/setCityId", payload);
       this.commit("total/setPointId", payload);
       await commit("setPoint", payload);
-    },
-    clearCity({ commit }) {
-      commit("clearCity");
-    },
-    clearPoint({ commit }) {
-      commit("clearPoint");
     }
   }
 };
