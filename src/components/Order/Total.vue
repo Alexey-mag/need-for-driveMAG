@@ -1,58 +1,55 @@
 <template>
   <div class="order__total">
-      <div v-if="getConfirmedOrder" class="total__container">
-        <div class="total__info">
-          <p class="total__info_title">Ваш заказ подтвержден</p>
-          <p class="total__car_name">{{ getConfirmedOrder.carId.name }}</p>
-          <p class="total__car_number">{{ getConfirmedOrder.carId.number }}</p>
-          <p v-if="getConfirmedOrder.isFullTank" class="total__option">
-            <b>Топливо </b>100%
-          </p>
-          <p v-if="getConfirmedOrder.isNeedChildChair" class="total__option">
-            <b>Детское кресло</b>
-          </p>
-          <p v-if="getConfirmedOrder.isRightWheel" class="total__option">
-            <b>Правый руль</b>
-          </p>
-          <p class="total__option">
-            <b>Доступна с </b
-            >{{ new Date(getConfirmedOrder.dateFrom).toLocaleString() }}
-          </p>
-        </div>
-        <img
-          class="total__img"
-          alt=""
-          :src="
-            imgPath(getConfirmedOrder)"
-          @error="defaultImage"
-        />
+    <div v-if="getConfirmedOrder" class="total__container">
+      <div class="total__info">
+        <p class="total__info_title">Ваш заказ подтвержден</p>
+        <p class="total__car_name">{{ getConfirmedOrder.carId.name }}</p>
+        <p class="total__car_number">{{ getConfirmedOrder.carId.number }}</p>
+        <p v-if="getConfirmedOrder.isFullTank" class="total__option">
+          <b>Топливо </b>100%
+        </p>
+        <p v-if="getConfirmedOrder.isNeedChildChair" class="total__option">
+          <b>Детское кресло</b>
+        </p>
+        <p v-if="getConfirmedOrder.isRightWheel" class="total__option">
+          <b>Правый руль</b>
+        </p>
+        <p class="total__option">
+          <b>Доступна с </b
+          >{{ new Date(getConfirmedOrder.dateFrom).toLocaleString() }}
+        </p>
       </div>
-      <div v-else class="total__container">
-        <div class="total__info">
-          <p class="total__car_name">{{ getOrder.carId.name }}</p>
-          <p class="total__car_number">{{ getOrder.carId.number }}</p>
-          <p v-if="getOrder.isFullTank" class="total__option">
-            <b>Топливо </b>100%
-          </p>
-          <p v-if="getOrder.isNeedChildChair" class="total__option">
-            <b>Детское кресло</b>
-          </p>
-          <p v-if="getOrder.isRightWheel" class="total__option">
-            <b>Правый руль</b>
-          </p>
-          <p class="total__option">
-            <b>Доступна с </b>{{ new Date(getOrder.dateFrom).toLocaleString() }}
-          </p>
-        </div>
-        <img
-          class="total__img"
-          alt=""
-          :src="
-            imgPath(getOrder)
-          "
-          @error="defaultImage"
-        />
+      <img
+        class="total__img"
+        alt=""
+        :src="imgPath(getConfirmedOrder)"
+        @error="defaultImage"
+      />
+    </div>
+    <div v-else class="total__container">
+      <div class="total__info">
+        <p class="total__car_name">{{ getOrder.carId.name }}</p>
+        <p class="total__car_number">{{ getOrder.carId.number }}</p>
+        <p v-if="getOrder.isFullTank" class="total__option">
+          <b>Топливо </b>100%
+        </p>
+        <p v-if="getOrder.isNeedChildChair" class="total__option">
+          <b>Детское кресло</b>
+        </p>
+        <p v-if="getOrder.isRightWheel" class="total__option">
+          <b>Правый руль</b>
+        </p>
+        <p class="total__option">
+          <b>Доступна с </b>{{ new Date(getOrder.dateFrom).toLocaleString() }}
+        </p>
       </div>
+      <img
+        class="total__img"
+        alt=""
+        :src="imgPath(getOrder)"
+        @error="defaultImage"
+      />
+    </div>
   </div>
 </template>
 
@@ -66,7 +63,7 @@ export default {
   },
   methods: {
     imgPath(order) {
-      return `${process.env.VUE_APP_API_IMG}${order.carId.thumbnail.path}`
+      return `${process.env.VUE_APP_API_IMG}${order.carId.thumbnail.path}`;
     },
     defaultImage(e) {
       e.target.src = "/images/default-car.jpg";

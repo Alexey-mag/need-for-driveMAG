@@ -1,7 +1,7 @@
 <template>
   <el-dialog
     :visible="isDialogVisible"
-    width="30%"
+    width="40%"
     :show-close="false"
     center
     :modal="false"
@@ -43,7 +43,7 @@ export default {
   margin-top: 40vh !important;
   border: none !important;
   box-shadow: none !important;
-  background: #FFFFFF !important;
+  background: #ffffff !important;
 }
 .el-dialog__wrapper {
   background: rgba(255, 255, 255, 0.9) !important;

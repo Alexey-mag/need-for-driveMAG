@@ -22,6 +22,7 @@
             type="datetime"
             editable
             :clearable="true"
+            clear-icon="form__clear"
             format="dd-MM-yyyy HH:mm"
             placeholder="Введите дату и время"
             @change="setStoreDateFrom"
@@ -36,6 +37,7 @@
             type="datetime"
             editable
             :clearable="true"
+            clear-icon="form__clear"
             format="dd-MM-yyyy HH:mm"
             placeholder="Введите дату и время"
             @change="setStoreDateTo"
@@ -49,10 +51,10 @@
           <el-radio
             v-for="rate in getRates"
             :key="rate.id"
-            :label="
-              rate.rateTypeId.name"
+            :label="rate.rateTypeId.name"
             @change="setStoreRate(rate)"
-          >{{rateRadioLabel(rate)}}</el-radio>
+            >{{ rateRadioLabel(rate) }}</el-radio
+          >
         </el-radio-group>
       </div>
       <div class="additional__form_block">
@@ -63,7 +65,7 @@
             :key="opt.name"
             :label="opt.name"
             @change="setStoreOptions()"
-            >{{optionCheckboxLabel(opt)}}</el-checkbox
+            >{{ optionCheckboxLabel(opt) }}</el-checkbox
           >
         </el-checkbox-group>
       </div>
@@ -72,7 +74,7 @@
 </template>
 
 <script>
-import { mapGetters } from "vuex";
+import { mapGetters, mapActions, mapMutations } from "vuex";
 
 export default {
   name: "Additional",
@@ -80,17 +82,17 @@ export default {
     return {
       radioColorsSelected: "",
       addOptions: [],
-      radioRateSelected: '',
+      radioRateSelected: "",
       dateTo: "",
       dateFrom: "",
       optionsDateFrom: {
         disabledDate: el => {
-          return el < new Date().setHours(0, 0, 0, 0)
+          return el < new Date().setHours(0, 0, 0, 0);
         }
       },
       optionsDateTo: {
         disabledDate: el => {
-          return el < this.dateFrom
+          return el < this.dateFrom;
         }
       }
     };
@@ -109,33 +111,41 @@ export default {
         return this.getPrice;
       },
       set(val) {
-        this.$store.dispatch("additional/setPrice", val);
+        this.setPrice(val);
       }
     },
     rentDuration: {
       get() {
-        return this.getRentDuration
+        return this.getRentDuration;
       },
       set(val) {
-        this.$store.dispatch('additional/setRentDuration', val)
+        this.setRentDuration(val);
       }
     }
   },
   watch: {
     getCar() {
-      this.radioColorsSelected = this.getCar.colors[0]
+      this.radioColorsSelected = this.getCar.colors[0];
     }
   },
-  async mounted() {
-    await this.$store.dispatch("additional/fetchRates");
+  mounted() {
+    this.fetchRates();
   },
   methods: {
+    ...mapActions("additional", [
+      "setPrice",
+      "fetchRates",
+      "setDateTo",
+      "setDateFrom",
+      "setColor"
+    ]),
+    ...mapMutations("additional", ["setRentDuration", "setOption", "setRate"]),
     setStoreDateTo() {
       if (!this.dateTo) {
         this.rentDuration = null;
         this.rateTotal = null;
       }
-      this.$store.dispatch("additional/setDateTo", this.dateTo);
+      this.setDateTo(this.dateTo);
       if (this.radioRateSelected && this.dateFrom && this.dateTo) {
         this.calculateRent();
       }
@@ -145,30 +155,31 @@ export default {
         this.rentDuration = null;
         this.rateTotal = null;
       }
-      this.$store.dispatch("additional/setDateFrom", this.dateFrom);
+      this.setDateFrom(this.dateFrom);
       if (this.radioRateSelected && this.dateFrom && this.dateTo) {
         this.calculateRent();
       }
     },
     setStoreOptions() {
-      this.$store.dispatch("additional/setOption", this.addOptions);
-      this.calculateRent();
+      this.setOption(this.addOptions);
+      if (this.radioRateSelected && this.dateFrom && this.dateTo) {
+        this.calculateRent();
+      }
     },
     setStoreColor(color) {
-      this.$store.dispatch('additional/setColor', color)
+      this.setColor(color);
     },
     setStoreRate(rate) {
-      this.$store.dispatch(
-              "additional/setRate",
-              rate
-      );
-      this.calculateRent();
+      this.setRate(rate);
+      if (this.radioRateSelected && this.dateFrom && this.dateTo) {
+        this.calculateRent();
+      }
     },
     rateRadioLabel(rate) {
-      return `${rate.rateTypeId.name}, ${rate.price} ₽/${rate.rateTypeId.unit}`
+      return `${rate.rateTypeId.name}, ${rate.price} ₽/${rate.rateTypeId.unit}`;
     },
     optionCheckboxLabel(opt) {
-      return`${opt.name},${opt.price}₽`
+      return `${opt.name},${opt.price}₽`;
     },
     calculateRent() {
       let adds = 0;

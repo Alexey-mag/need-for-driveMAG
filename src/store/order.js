@@ -23,8 +23,8 @@ export default {
       return state.currentPoint;
     },
     getLocationStatus(state) {
-      const status = (!(state.currentCity && state.currentPoint))
-      return { id: state.id, isDisabled: status }
+      const status = !(state.currentCity && state.currentPoint);
+      return { id: state.id, isDisabled: status };
     }
   },
   mutations: {
@@ -53,6 +53,7 @@ export default {
     clearCity(state) {
       state.currentCity = null;
       state.currentPoint = null;
+      state.currentCityPoints = [];
     },
     clearPoint(state) {
       state.currentPoint = null;
@@ -61,72 +62,73 @@ export default {
   actions: {
     async fetchPointCoords(context, payload) {
       try {
-        const {data} = await axiosApi({
-          url:
-              process.env.VUE_APP_API_YANDEX_GEO,
+        const { data } = await axiosApi({
+          url: process.env.VUE_APP_API_YANDEX_GEO,
           method: "get",
           params: {
             apikey: process.env.VUE_APP_API_YANDEX_KEY,
-            format: 'json',
+            format: "json",
             geocode: payload.cityId.name + payload.address
           }
-        })
+        });
         const pointCoords =
-            data.response.GeoObjectCollection?.featureMember?.[0]?.GeoObject?.Point;
+          data.response.GeoObjectCollection?.featureMember?.[0]?.GeoObject
+            ?.Point;
         payload["coords"] = Object.values(pointCoords.pos.split(" "));
       } catch (e) {
-        throw e
+        throw e;
       }
     },
     async fetchCityCoords(context, payload) {
       try {
-        const {data} = await axiosApi({
-          url:
-            process.env.VUE_APP_API_YANDEX_GEO,
+        const { data } = await axiosApi({
+          url: process.env.VUE_APP_API_YANDEX_GEO,
           method: "get",
           params: {
             apikey: process.env.VUE_APP_API_YANDEX_KEY,
-            format: 'json',
+            format: "json",
             geocode: payload.name
           }
         });
-        const pointCoords = data.response.GeoObjectCollection?.featureMember?.[0]?.GeoObject?.Point;
+        const pointCoords =
+          data.response.GeoObjectCollection?.featureMember?.[0]?.GeoObject
+            ?.Point;
         payload["coords"] = Object.values(pointCoords.pos.split(" "));
         this.commit("order/setCity", payload);
       } catch (error) {
-        throw error
+        throw error;
       }
     },
     async fetchCity(context) {
       try {
-        const {data} = await axiosApi({
+        const { data } = await axiosApi({
           url: "/city",
           method: "get"
-        })
-        context.commit("setCities",data.data);
+        });
+        context.commit("setCities", data.data);
       } catch (e) {
-        throw e
+        throw e;
       }
     },
     async fetchCurrentCityPoints(context, payload) {
       try {
-        const {data} = await axiosApi({
+        const { data } = await axiosApi({
           url: "/point?cityId=" + payload,
           method: "get"
-        })
+        });
         context.commit("setCityPoints", data.data);
       } catch (e) {
-        throw e
+        throw e;
       }
     },
     async setCity(context, payload) {
       this.commit("shared/setLoading", true);
       try {
         await context.dispatch("fetchCityCoords", payload);
-        const {data} = await axiosApi({
+        const { data } = await axiosApi({
           url: "/point?cityId=" + payload.id,
           method: "get"
-        })
+        });
         context.commit("setPoints", data.data);
         const pointsWithCoords = await context.getters.getPoints.map(el => {
           return context.dispatch("fetchPointCoords", el);
@@ -137,20 +139,13 @@ export default {
         });
       } catch (e) {
         this.commit("shared/setLoading", false);
-        throw e
+        throw e;
       }
-
     },
     async setPoint({ commit }, payload) {
       this.commit("total/setCityId", payload);
       this.commit("total/setPointId", payload);
       await commit("setPoint", payload);
-    },
-    clearCity({ commit }) {
-      commit("clearCity");
-    },
-    clearPoint({ commit }) {
-      commit("clearPoint");
     }
   }
 };

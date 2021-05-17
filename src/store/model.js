@@ -16,8 +16,8 @@ export default {
       return state.car;
     },
     getModelStatus(state) {
-      const status = (!state.car)
-      return { id: state.id, isDisabled: status }
+      const status = !state.car;
+      return { id: state.id, isDisabled: status };
     },
     getCarCategory(state) {
       return state.category;
@@ -48,15 +48,15 @@ export default {
     async fetchModels(context) {
       this.commit("shared/setLoading", true);
       try {
-        const {data} = await axiosApi({
+        const { data } = await axiosApi({
           url: "/car",
           method: "get"
-        })
+        });
         context.commit("setCars", data.data);
         this.commit("shared/setLoading", false);
       } catch (e) {
         this.commit("shared/setLoading", false);
-        throw e
+        throw e;
       }
     },
     setCar({ commit }, payload) {

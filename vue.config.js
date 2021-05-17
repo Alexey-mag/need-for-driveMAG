@@ -8,6 +8,17 @@ module.exports = {
       alias: {
         "@": path.resolve(__dirname, "src/")
       }
+    },
+    module: {
+      rules: [
+        {
+          test: /\.(svg|png|jpe?g|gif)$/i,
+          loader: "file-loader",
+          options: {
+            name: "[path][name].[ext]"
+          }
+        }
+      ]
     }
   },
   css: {
@@ -22,6 +33,7 @@ module.exports = {
       }
     }
   },
+  assetsDir: "@/assets/",
   devServer: process.env.NODE_ENV === "production" ? {} : proxy()
 };
 

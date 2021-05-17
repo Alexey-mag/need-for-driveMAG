@@ -37,8 +37,9 @@
 </template>
 
 <script>
-import { mapGetters } from "vuex";
+import { mapGetters, mapActions, mapMutations } from "vuex";
 import Loader from "../Loader";
+import defaultCar from "@/assets/default-car.jpg";
 
 export default {
   name: "Model",
@@ -64,9 +65,11 @@ export default {
     }
   },
   mounted() {
-    this.$store.dispatch("model/fetchModels");
+    this.fetchModels();
   },
   methods: {
+    ...mapActions("model", ["fetchModels", "setCar"]),
+    ...mapMutations("additional", ["setColor"]),
     imgPath(car) {
       return `${process.env.VUE_APP_API_IMG}${car.thumbnail.path}`;
     },
@@ -76,10 +79,11 @@ export default {
         : car.name;
     },
     selectCar(car) {
-      this.$store.dispatch("model/setCar", car);
+      this.setColor("Любой");
+      this.setCar(car);
     },
     defaultImage(e) {
-      e.target.src = "/images/default-car.jpg";
+      e.target.src = defaultCar;
     }
   }
 };

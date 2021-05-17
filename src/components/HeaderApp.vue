@@ -3,8 +3,9 @@
     <p class="main__text_green">
       Need for drive
     </p>
-    <div class="main__header__city">
-      <img :src="'/images/main_map.svg'" alt="" />
+    <div class="main__header__city" v-if="getCity">
+      <img :src="require('@/assets/main_map.svg')" alt="" />
+      <!--      <img :src="require(../assets/${main_map.svg})" alt="" />-->
       <p class="main__text_city">
         {{ getCity ? getCity.name : "" }}
       </p>

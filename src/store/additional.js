@@ -52,13 +52,15 @@ export default {
       return state.rentDuration;
     },
     getAdditionalStatus(state) {
-      const status = (!(state.rate &&
-          state.price &&
-          state.rentDuration &&
-          state.dateFrom &&
-          state.dateTo &&
-          state.color))
-      return { id: state.id, isDisabled: status }
+      const status = !(
+        state.rate &&
+        state.price &&
+        state.rentDuration &&
+        state.dateFrom &&
+        state.dateTo &&
+        state.color
+      );
+      return { id: state.id, isDisabled: status };
     }
   },
   mutations: {
@@ -81,12 +83,14 @@ export default {
       state.rates = payload;
     },
     setRate(state, payload) {
-      state.rate = payload
+      state.rate = payload;
       this.commit("total/setRate", state.rate);
     },
     setOption(state, payload) {
       state.addOptions.map(el => {
-        payload.includes(el.name) ? el.optValue = true : el.optValue = false
+        payload.includes(el.name)
+          ? (el.optValue = true)
+          : (el.optValue = false);
         return el;
       });
       this.commit("total/setOptions", state.addOptions);
@@ -95,27 +99,21 @@ export default {
   actions: {
     async fetchRates({ commit }) {
       try {
-        const {data} = await axiosApi({
+        const { data } = await axiosApi({
           url: "/rate",
           method: "get"
-        })
+        });
         commit("setRates", data.data);
       } catch (e) {
-        throw e
+        throw e;
       }
     },
     setRate({ commit }, payload) {
       commit("setRate", payload);
     },
-    setOption({ commit }, payload) {
-      commit("setOption", payload);
-    },
     setPrice({ commit }, payload) {
       this.commit("total/setPrice", payload);
       commit("setPrice", payload);
-    },
-    setRentDuration({ commit }, payload) {
-      commit("setRentDuration", payload);
     },
     setDateFrom({ commit }, payload) {
       commit("setDateFrom", payload);

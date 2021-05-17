@@ -105,7 +105,9 @@ export default {
       return state.orderComponents;
     },
     currentComponent(state) {
-      return state.currentComponent ? state.currentComponent : state.orderComponents[0]
+      return state.currentComponent
+        ? state.currentComponent
+        : state.orderComponents[0];
     },
     isMenuOpen(state) {
       return state.isBurgerActive;
@@ -133,7 +135,8 @@ export default {
     setComponentStatus(state, payload) {
       if (payload.isDisabled === false) {
         if (payload.id === state.orderComponents.length) {
-          state.orderComponents[state.orderComponents.length -1].isDisabled = payload.isDisabled;
+          state.orderComponents[state.orderComponents.length - 1].isDisabled =
+            payload.isDisabled;
         } else {
           state.orderComponents[payload.id].isDisabled = false;
         }
@@ -199,12 +202,6 @@ export default {
   actions: {
     toggleBurgerMenu({ commit }) {
       commit("toggleBurgerMenu");
-    },
-    setCurrentComponent({ commit }, payload) {
-      commit("setCurrentComponent", payload);
-    },
-    setComponentStatus({ commit }, payload) {
-      commit("setComponentStatus", payload);
     },
     toNextStep({ commit }) {
       commit("toNextStep");

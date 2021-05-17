@@ -67,10 +67,10 @@ export default {
   },
   actions: {
     async fetchOrderStatus({ commit }) {
-      const {data} = await axiosApi({
+      const { data } = await axiosApi({
         url: "/orderStatus",
         method: "get"
-      })
+      });
       commit("setOrderId", data.data[0]);
     },
     setCityId({ commit }, payload) {
@@ -87,11 +87,11 @@ export default {
     },
     async pushOrder(context) {
       const order = JSON.parse(JSON.stringify(context.state.order));
-      const {data} = await axiosApi({
+      const { data } = await axiosApi({
         url: "/order",
         method: "post",
         data: order
-      })
+      });
       context.commit("setOrder", data.data);
     },
     clearConfirmedOrder({ commit }) {
