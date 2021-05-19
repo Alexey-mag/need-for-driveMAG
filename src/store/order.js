@@ -74,7 +74,7 @@ export default {
         const pointCoords =
           data.response.GeoObjectCollection?.featureMember?.[0]?.GeoObject
             ?.Point;
-        payload["coords"] = Object.values(pointCoords.pos.split(" "));
+        payload.coords = Object.values(pointCoords.pos.split(" "));
       } catch (e) {
         throw e;
       }
@@ -93,7 +93,7 @@ export default {
         const pointCoords =
           data.response.GeoObjectCollection?.featureMember?.[0]?.GeoObject
             ?.Point;
-        payload["coords"] = Object.values(pointCoords.pos.split(" "));
+        payload.coords = Object.values(pointCoords.pos.split(" "));
         this.commit("order/setCity", payload);
       } catch (error) {
         throw error;
@@ -130,10 +130,10 @@ export default {
           method: "get"
         });
         context.commit("setPoints", data.data);
-        const pointsWithCoords = await context.getters.getPoints.map(el => {
+        const pointsWithCoords = context.getters.getPoints.map(el => {
           return context.dispatch("fetchPointCoords", el);
         });
-        Promise.all(pointsWithCoords).then(() => {
+        await Promise.all(pointsWithCoords).then(() => {
           this.commit("shared/setLoading", false);
           this.commit("shared/setMapStatus", true);
         });
@@ -143,8 +143,6 @@ export default {
       }
     },
     async setPoint({ commit }, payload) {
-      this.commit("total/setCityId", payload);
-      this.commit("total/setPointId", payload);
       await commit("setPoint", payload);
     }
   }

@@ -17,44 +17,24 @@ export default {
     confirmedOrder: null
   },
   getters: {
-    getOrder(state) {
-      return state.order;
-    },
     getConfirmedOrder(state) {
       return state.confirmedOrder;
+    },
+    getOrder(state, getters, rootState, rootGetters) {
+      state.order.cityId = rootGetters["order/getCity"]
+      state.order.pointId = rootGetters["order/getPoint"]
+      state.order.carId = rootGetters["model/getCar"]
+      state.order.color = rootGetters["additional/getColor"]
+      state.order.dateFrom = rootGetters["additional/getDateFrom"]
+      state.order.dateTo = rootGetters["additional/getDateTo"]
+      state.order.rateId = rootGetters["additional/getRate"]
+      state.order.price = rootGetters["additional/getPrice"]
+      return state.order
     }
   },
   mutations: {
     setOrderId(state, payload) {
       state.order.orderStatusId = payload;
-    },
-    setCityId(state, payload) {
-      state.order.cityId = payload.cityId;
-    },
-    setPointId(state, payload) {
-      state.order.pointId = {
-        address: payload.address,
-        id: payload.id,
-        name: payload.name
-      };
-    },
-    setCarId(state, payload) {
-      state.order.carId = payload;
-    },
-    setColor(state, payload) {
-      state.order.color = payload;
-    },
-    setRate(state, payload) {
-      state.order.rateId = payload;
-    },
-    setPrice(state, payload) {
-      state.order.price = payload;
-    },
-    setDateTo(state, payload) {
-      state.order.dateTo = Number(payload);
-    },
-    setDateFrom(state, payload) {
-      state.order.dateFrom = Number(payload);
     },
     setOptions(state, payload) {
       payload.map(el => {
@@ -72,15 +52,6 @@ export default {
         method: "get"
       });
       commit("setOrderId", data.data[0]);
-    },
-    setCityId({ commit }, payload) {
-      commit("setCityId", payload);
-    },
-    setPointId({ commit }, payload) {
-      commit("setPointId", payload);
-    },
-    setCarId({ commit }, payload) {
-      commit("setCarId", payload);
     },
     setColor({ commit }, payload) {
       commit("setColor", payload);

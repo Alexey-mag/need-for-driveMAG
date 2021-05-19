@@ -5,8 +5,7 @@
         <el-radio
           v-for="cat in getCarCategory"
           :key="cat"
-          :label="cat"
-        ></el-radio>
+          :label="cat" />
       </el-radio-group>
     </div>
     <div class="model__container">
@@ -14,8 +13,7 @@
         v-for="car in filteredCars"
         :key="car.id"
         class="model__car_card"
-        @click="selectCar(car)"
-      >
+        @click="selectCar(car)">
         <div class="model__car_name">
           {{ getCarName(car) }}
         </div>
@@ -26,8 +24,7 @@
           class="model__car_image"
           :src="imgPath(car)"
           alt=""
-          @error="defaultImage"
-        />
+          @error="defaultImage" />
       </div>
     </div>
     <div class="model__loading">

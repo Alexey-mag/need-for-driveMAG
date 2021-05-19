@@ -3,13 +3,12 @@
     <div v-if="getRates" class="additional__container">
       <div class="additional__form_block">
         <p class="additional__label">Цвет</p>
-        <el-radio-group v-model="radioColorsSelected">
+        <el-radio-group :value="radioColorsSelected || getCar.colors[0]">
           <el-radio
             v-for="color in getCar.colors"
             :key="color"
             :label="color"
-            @change="setStoreColor(color)"
-          ></el-radio>
+            @change="setStoreColor(color)" />
         </el-radio-group>
       </div>
       <div class="additional__form_block">
@@ -25,9 +24,7 @@
             clear-icon="form__clear"
             format="dd-MM-yyyy HH:mm"
             placeholder="Введите дату и время"
-            @change="setStoreDateFrom"
-          >
-          </el-date-picker>
+            @change="setStoreDateFrom" />
         </div>
         <div class="additional__date_container">
           <p class="additional__date_label">По</p>
@@ -40,9 +37,7 @@
             clear-icon="form__clear"
             format="dd-MM-yyyy HH:mm"
             placeholder="Введите дату и время"
-            @change="setStoreDateTo"
-          >
-          </el-date-picker>
+            @change="setStoreDateTo"/>
         </div>
       </div>
       <div class="additional__form_block">
@@ -53,8 +48,7 @@
             :key="rate.id"
             :label="rate.rateTypeId.name"
             @change="setStoreRate(rate)"
-            >{{ rateRadioLabel(rate) }}</el-radio
-          >
+            >{{ rateRadioLabel(rate) }}</el-radio>
         </el-radio-group>
       </div>
       <div class="additional__form_block">
@@ -104,7 +98,8 @@ export default {
       "getOptions",
       "getRate",
       "getPrice",
-      "getRentDuration"
+      "getRentDuration",
+      "isPriceValid"
     ]),
     rateTotal: {
       get() {
@@ -123,11 +118,6 @@ export default {
       }
     }
   },
-  watch: {
-    getCar() {
-      this.radioColorsSelected = this.getCar.colors[0];
-    }
-  },
   mounted() {
     this.fetchRates();
   },
@@ -139,7 +129,7 @@ export default {
       "setDateFrom",
       "setColor"
     ]),
-    ...mapMutations("additional", ["setRentDuration", "setOption", "setRate"]),
+    ...mapMutations("additional", ["setRentDuration", "setOption", "setRate", "setPriceValid"]),
     setStoreDateTo() {
       if (!this.dateTo) {
         this.rentDuration = null;
@@ -167,6 +157,7 @@ export default {
       }
     },
     setStoreColor(color) {
+      this.radioColorsSelected = color;
       this.setColor(color);
     },
     setStoreRate(rate) {
@@ -202,19 +193,38 @@ export default {
               }
               this.rentDuration = { units: units, name: "д" };
               this.rateTotal = units * this.getRate.price + adds;
-              break;
+              if (this.getCar.priceMin <= this.rateTotal && this.rateTotal <= this.getCar.priceMax) {
+                this.setPriceValid(true);
+                break;
+              } else {
+                this.setPriceValid(false);
+                break;
+              }
+
             }
             case "7 дней": {
               let units = Math.ceil(amount / 1000 / 60 / 60 / 24 / 7);
               this.rentDuration = { units: units, name: "нед" };
               this.rateTotal = units * this.getRate.price + adds;
-              break;
+              if (this.getCar.priceMin <= this.rateTotal && this.rateTotal <= this.getCar.priceMax) {
+                this.setPriceValid(true);
+                break;
+              } else {
+                this.setPriceValid(false);
+                break;
+              }
             }
             case "мин": {
               const units = Math.floor(amount / 1000 / 60);
               this.rentDuration = { units: units, name: "мин" };
               this.rateTotal = units * this.getRate.price + adds;
-              break;
+              if (this.getCar.priceMin <= this.rateTotal && this.rateTotal <= this.getCar.priceMax) {
+                this.setPriceValid(true);
+                break;
+              } else {
+                this.setPriceValid(false);
+                break;
+              }
             }
           }
         }

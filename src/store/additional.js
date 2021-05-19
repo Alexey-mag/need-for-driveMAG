@@ -30,9 +30,19 @@ export default {
     dateTo: null,
     dateFrom: null,
     color: null,
-    id: 3
+    id: 3,
+    isPriceValid: true
   },
   getters: {
+    isPriceValid(state) {
+      return state.isPriceValid
+    },
+    getDateTo(state) {
+      return state.dateTo
+    },
+    getDateFrom(state) {
+      return state.dateFrom
+    },
     getColor(state) {
       return state.color;
     },
@@ -58,12 +68,16 @@ export default {
         state.rentDuration &&
         state.dateFrom &&
         state.dateTo &&
-        state.color
+        state.color &&
+        state.isPriceValid
       );
       return { id: state.id, isDisabled: status };
     }
   },
   mutations: {
+    setPriceValid(state, payload) {
+      state.isPriceValid = payload
+    },
     setColor(state, payload) {
       state.color = payload;
     },
@@ -84,7 +98,6 @@ export default {
     },
     setRate(state, payload) {
       state.rate = payload;
-      this.commit("total/setRate", state.rate);
     },
     setOption(state, payload) {
       state.addOptions.map(el => {
@@ -112,19 +125,15 @@ export default {
       commit("setRate", payload);
     },
     setPrice({ commit }, payload) {
-      this.commit("total/setPrice", payload);
       commit("setPrice", payload);
     },
     setDateFrom({ commit }, payload) {
       commit("setDateFrom", payload);
-      this.commit("total/setDateFrom", payload);
     },
     setDateTo({ commit }, payload) {
       commit("setDateTo", payload);
-      this.commit("total/setDateTo", payload);
     },
     setColor({ commit }, payload) {
-      this.commit("total/setColor", payload);
       commit("setColor", payload);
     }
   }

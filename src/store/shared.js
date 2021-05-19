@@ -6,6 +6,7 @@ export default {
     loading: false,
     isMapReady: false,
     isDialogVisible: false,
+    windowWidth: null,
     slides: [
       {
         id: 1,
@@ -126,9 +127,15 @@ export default {
     },
     isDialogVisible(state) {
       return state.isDialogVisible;
+    },
+    getWindowWidth(state) {
+      return state.windowWidth
     }
   },
   mutations: {
+    setWindowWidth(state, payload) {
+      state.windowWidth = payload
+    },
     setDialogStatus(state, payload) {
       state.isDialogVisible = payload;
     },

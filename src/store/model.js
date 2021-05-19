@@ -60,7 +60,6 @@ export default {
       }
     },
     setCar({ commit }, payload) {
-      this.commit("total/setCarId", payload);
       commit("setCar", payload);
     }
   }

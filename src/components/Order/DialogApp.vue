@@ -4,8 +4,7 @@
     width="40%"
     :show-close="false"
     center
-    :modal="false"
-  >
+    :modal="false">
     <p class="dialog__text">Подтвердить заказ</p>
     <span slot="footer" class="dialog-footer">
       <el-button type="primary" @click="confirm">Подтвердить</el-button>

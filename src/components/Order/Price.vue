@@ -4,46 +4,53 @@
       <p class="price__title">Ваш заказ:</p>
       <div v-if="getPoint" class="price__menu_step">
         <p class="price__menu_step__name">Пункт выдачи</p>
-        <div class="price__dots"></div>
+        <div class="price__dots" />
         <div class="price__menu_step__value">
           {{ getPoint.cityId.name }},<br />{{ getPoint.address }}
         </div>
       </div>
       <div v-if="getCar" class="price__menu_step">
         <p class="price__menu_step__name">Модель</p>
-        <div class="price__dots"></div>
+        <div class="price__dots" />
         <div class="price__menu_step__value">
           {{ getCar.name }}
         </div>
       </div>
       <div v-if="getColor" class="price__menu_step">
         <p class="price__menu_step__name">Цвет</p>
-        <div class="price__dots"></div>
+        <div class="price__dots" />
         <div class="price__menu_step__value">
           {{ getColor }}
         </div>
       </div>
       <div v-if="getRentDuration" class="price__menu_step">
         <p class="price__menu_step__name">Длительность аренды</p>
-        <div class="price__dots"></div>
+        <div class="price__dots" />
         <div class="price__menu_step__value">
           {{ getRentDuration.units }}{{ getRentDuration.name }}
         </div>
       </div>
       <div v-if="getRate" class="price__menu_step">
         <p class="price__menu_step__name">Тариф</p>
-        <div class="price__dots"></div>
+        <div class="price__dots" />
         <div class="price__menu_step__value">{{ getRate.rateTypeId.name }}</div>
       </div>
       <div v-for="opt in getOptions" :key="opt.name">
         <div v-if="opt.optValue" class="price__menu_step">
           <p class="price__menu_step__name">{{ opt.name }}</p>
-          <div class="price__dots"></div>
+          <div class="price__dots" />
           <div class="price__menu_step__value">Да</div>
         </div>
       </div>
       <div v-if="getCar" class="price__total">
-        <div v-if="getPrice"><b>Цена:</b>{{ getPrice }} ₽</div>
+        <div v-if="getPrice && !isPriceValid" class="price__total_error">
+          <b>Цена </b>для Вашей машины должна быть в диапазоне от
+          {{ getCar.priceMin }} ₽ до {{ getCar.priceMax }} ₽. Текущая цена
+          {{ getPrice }} ₽
+        </div>
+        <div v-else-if="getPrice && isPriceValid">
+          <b>Цена:</b>{{ getPrice }} ₽
+        </div>
         <div v-else>
           <b>Цена:</b> от{{ getCar.priceMin }} до {{ getCar.priceMax }} ₽
         </div>
@@ -60,7 +67,7 @@
         class="price__button"
         :class="buttonClass"
         :disabled="buttonActive"
-        @click="toNextStep"
+        @click="toNextComp"
       >
         {{ currentComponent.buttonText }}
       </button>
@@ -70,53 +77,58 @@
 </template>
 
 <script>
-import { mapGetters } from "vuex";
-import DialogApp from "@/components/Order/DialogApp";
+import { mapGetters, mapMutations, mapActions } from 'vuex'
+import DialogApp from '@/components/Order/DialogApp'
 
 export default {
-  name: "Price",
+  name: 'Price',
   components: { DialogApp },
   computed: {
-    ...mapGetters("order", ["getCity", "getPoint", "getPoints"]),
-    ...mapGetters("model", ["getCar"]),
-    ...mapGetters("shared", ["currentComponent", "orderComponents"]),
-    ...mapGetters("additional", [
-      "getRentDuration",
-      "getRate",
-      "getOptions",
-      "getPrice",
-      "getColor"
+    ...mapGetters('order', ['getCity', 'getPoint', 'getPoints']),
+    ...mapGetters('model', ['getCar']),
+    ...mapGetters('shared', ['currentComponent', 'orderComponents']),
+    ...mapGetters('additional', [
+      'getRentDuration',
+      'getRate',
+      'getOptions',
+      'getPrice',
+      'getColor',
+      'isPriceValid',
     ]),
-    ...mapGetters("total", ["getConfirmedOrder"]),
+    ...mapGetters('total', ['getConfirmedOrder']),
     buttonActive() {
       if (this.currentComponent.id === 4) {
-        return this.currentComponent.isDisabled;
+        return this.currentComponent.isDisabled
       } else {
-        return this.orderComponents[this.currentComponent.id].isDisabled;
+        return this.orderComponents[this.currentComponent.id].isDisabled
       }
     },
     buttonClass() {
       if (this.currentComponent.id === 4) {
         return {
-          price__button_disabled: this.currentComponent.isDisabled
-        };
+          price__button_disabled: this.currentComponent.isDisabled,
+        }
       } else {
         return {
           price__button_disabled: this.orderComponents[this.currentComponent.id]
-            .isDisabled
-        };
+            .isDisabled,
+        }
       }
-    }
+    },
   },
   methods: {
-    toNextStep() {
-      this.$store.dispatch("shared/toNextStep");
+    ...mapMutations('shared', ['toNextStep']),
+    ...mapActions('total', ['clearConfirmedOrder']),
+    toNextComp() {
+      this.toNextStep()
+      // this.$store.dispatch("shared/toNextStep");
     },
     reset() {
-      this.$store.dispatch("total/clearConfirmedOrder");
-    }
-  }
-};
+      this.clearConfirmedOrder()
+      // this.$store.dispatch("total/clearConfirmedOrder");
+    },
+  },
+}
 </script>
 
 <style scoped lang="scss">
@@ -177,7 +189,7 @@ export default {
 .price__dots {
   width: auto;
   flex-grow: 1;
-  content: "";
+  content: '';
   margin: 0 11px;
   height: auto;
   border-bottom: 1px dotted $main-gray;
@@ -201,5 +213,8 @@ export default {
   font-weight: 500;
   font-size: 16px;
   line-height: 16px;
+}
+.price__total_error {
+  color: rgba(255, 7, 5, 0.65);
 }
 </style>

@@ -3,9 +3,8 @@
     <p class="main__text_green">
       Need for drive
     </p>
-    <div class="main__header__city" v-if="getCity">
+    <div v-if="getCity" class="main__header__city">
       <img class="header__img" :src="require('@/assets/main_map.svg')" alt="" />
-      <!--      <img :src="require(../assets/${main_map.svg})" alt="" />-->
       <p class="main__text_city">
         {{ getCity ? getCity.name : "" }}
       </p>
@@ -24,7 +23,7 @@ export default {
 };
 </script>
 
-<style scoped lang="scss">
+<style lang="scss">
 .main__header {
   display: flex;
   justify-content: space-between;

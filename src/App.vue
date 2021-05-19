@@ -6,7 +6,7 @@
 
 <script>
 import DefaultLayout from "@/layouts/DefaultLayout";
-import { mapActions } from "vuex";
+import { mapActions, mapMutations } from "vuex";
 
 export default {
   name: "App",
@@ -15,14 +15,21 @@ export default {
   },
   data() {
     return {
-      layout: this.$route.meta.layout
+      layout: this.$route.meta.layout,
+      windowWidth: window.innerWidth
     };
   },
   mounted() {
     this.fetchCity();
+    this.setWindowWidth(this.windowWidth);
+    window.onresize = () => {
+      this.windowWidth = window.innerWidth
+      this.setWindowWidth(this.windowWidth);
+    }
   },
   methods: {
-    ...mapActions("order", ["fetchCity"])
+    ...mapActions("order", ["fetchCity"]),
+    ...mapMutations('shared', ['setWindowWidth'])
   }
 };
 </script>

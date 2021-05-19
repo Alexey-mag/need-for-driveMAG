@@ -4,26 +4,22 @@
     <div
       class="main__burger__button"
       :class="{ main__burger__button_active: isMenuOpen }"
-      @click="toggleBurgerMenu"
-    >
+      @click="toggleBurgerMenu">
       <span class="main__burger__lines" />
     </div>
     <div
       class="main__language-toggle"
       :class="{ 'main__language-toggle-mobile': isMenuOpen }"
       @click="languageToggle"
-      v-text="lang"
-    />
+      v-text="lang" />
     <nav
       class="main__burger__nav"
-      :class="{ main__burger__nav__active: isMenuOpen }"
-    >
+      :class="{ main__burger__nav__active: isMenuOpen }">
       <p
         v-for="menuItem in menuItems"
         :key="menuItem.id"
         class="main__burger__menu_item"
-        @click="toHomePage"
-      >
+        @click="toHomePage">
         {{ menuItem.name.toUpperCase() }}
       </p>
       <div class="main__icons_set">

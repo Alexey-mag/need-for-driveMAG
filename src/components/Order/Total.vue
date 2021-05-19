@@ -4,7 +4,7 @@
       <div class="total__info">
         <p class="total__info_title">Ваш заказ подтвержден</p>
         <p class="total__car_name">{{ getConfirmedOrder.carId.name }}</p>
-        <p class="total__car_number">{{ getConfirmedOrder.carId.number }}</p>
+        <p v-if="getOrder.carId.number" class="total__car_number">{{ getConfirmedOrder.carId.number }}</p>
         <p v-if="getConfirmedOrder.isFullTank" class="total__option">
           <b>Топливо </b>100%
         </p>
@@ -23,13 +23,12 @@
         class="total__img"
         alt=""
         :src="imgPath(getConfirmedOrder)"
-        @error="defaultImage"
-      />
+        @error="defaultImage" />
     </div>
     <div v-else class="total__container">
       <div class="total__info">
         <p class="total__car_name">{{ getOrder.carId.name }}</p>
-        <p class="total__car_number">{{ getOrder.carId.number }}</p>
+        <p v-if="getOrder.carId.number" class="total__car_number">{{ getOrder.carId.number }}</p>
         <p v-if="getOrder.isFullTank" class="total__option">
           <b>Топливо </b>100%
         </p>
@@ -47,8 +46,7 @@
         class="total__img"
         alt=""
         :src="imgPath(getOrder)"
-        @error="defaultImage"
-      />
+        @error="defaultImage" />
     </div>
   </div>
 </template>

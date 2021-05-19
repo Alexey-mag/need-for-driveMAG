@@ -5,8 +5,7 @@
       :settings="settings"
       :coords="coords"
       :zoom="zoom"
-      style="height: 100%; width: 100%"
-    >
+      style="height: 100%; width: 100%">
       <ymap-marker
         v-for="point in getPoints"
         :key="point.id"
@@ -14,8 +13,7 @@
         :coords="point.coords"
         :icon="markerIcon"
         :hint-content="`${point.name},  ${point.address}`"
-        @click="markerOnCenter(point)"
-      />
+        @click="markerOnCenter(point)"/>
     </yandex-map>
     <loader v-if="loading" />
   </div>

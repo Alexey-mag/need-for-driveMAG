@@ -10,14 +10,14 @@
             :fetch-suggestions="searchCities"
             value-key="name"
             placeholder="Начните вводить город..."
-            @select="selectCity"
-          >
+            @select="selectCity">
             <i
               v-show="city"
               slot="suffix"
               class="form__clear"
               @click="clearIconCity"
-            ></i>
+            >
+            </i>
           </el-autocomplete>
         </div>
         <div class="location__form_block">
@@ -28,21 +28,21 @@
             :fetch-suggestions="searchPoints"
             value-key="name"
             placeholder="Начните вводить пункт выдачи..."
-            @select="selectPoint"
-          >
+            @select="selectPoint">
             <i
               v-show="point"
               slot="suffix"
               class="form__clear"
               @click="clearIconPoint"
-            ></i>
+            >
+            </i>
           </el-autocomplete>
         </div>
       </form>
       <span>Выбрать на карте</span>
     </div>
     <div class="location__map">
-      <map-app></map-app>
+      <map-app />
     </div>
   </div>
 </template>

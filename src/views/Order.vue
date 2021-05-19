@@ -13,18 +13,16 @@
         <div
           v-for="comp in orderComponents"
           :key="comp.id"
-          class="order__step__container"
-        >
+          class="order__step__container">
           <button
             class="order__step"
             :disabled="comp.isDisabled"
             :class="{
               order__step_active: comp.isActive,
               order__step_disabled: comp.isDisabled,
-              order__step_finished: !comp.isDisabled
+              order__step_finished: !comp.isDisabled,
             }"
-            @click="changeCurrentComponent(comp)"
-          >
+            @click="changeCurrentComponent(comp)">
             {{ comp.tag }}
           </button>
           <div class="order__arrow" />
@@ -34,13 +32,11 @@
     <div
       v-for="comp of orderComponents"
       :key="comp.id"
-      class="order__component_container"
-    >
+      class="order__component_container">
       <keep-alive>
         <component
           :is="comp.name"
-          v-if="currentComponent.name === comp.name"
-        ></component>
+          v-if="currentComponent.name === comp.name" />
       </keep-alive>
     </div>
     <price />
@@ -48,47 +44,46 @@
 </template>
 
 <script>
-import Price from "@/components/Order/Price";
-import Location from "@/components/Order/Location/Location";
-import Model from "@/components/Order/Model";
-import Additional from "@/components/Order/Additional";
-import Total from "@/components/Order/Total";
-import HeaderApp from "@/components/HeaderApp";
-import { mapGetters, mapMutations, mapActions } from "vuex";
+import Price from '@/components/Order/Price'
+import Location from '@/components/Order/Location/Location'
+import Model from '@/components/Order/Model'
+import Additional from '@/components/Order/Additional'
+import Total from '@/components/Order/Total'
+import HeaderApp from '@/components/HeaderApp'
+import { mapGetters, mapMutations, mapActions } from 'vuex'
 
 export default {
-  name: "Order",
+  name: 'Order',
   components: { Price, Location, Additional, Model, Total, HeaderApp },
   computed: {
-    ...mapGetters("shared", ["orderComponents", "currentComponent"]),
-    ...mapGetters("order", ["getLocationStatus"]),
-    ...mapGetters("model", ["getModelStatus"]),
-    ...mapGetters("additional", ["getAdditionalStatus"]),
-    ...mapGetters("total", ["getConfirmedOrder"])
+    ...mapGetters('shared', ['orderComponents', 'currentComponent', 'getWindowWidth']),
+    ...mapGetters('order', ['getLocationStatus']),
+    ...mapGetters('model', ['getModelStatus']),
+    ...mapGetters('additional', ['getAdditionalStatus']),
+    ...mapGetters('total', ['getConfirmedOrder']),
   },
   watch: {
     getLocationStatus(res) {
-      this.setComponentStatus(res);
+      this.setComponentStatus(res)
     },
     getModelStatus(res) {
-      this.setComponentStatus(res);
+      this.setComponentStatus(res)
     },
     getAdditionalStatus(res) {
-      this.setComponentStatus(res);
-    }
+      this.setComponentStatus(res)
+    },
   },
   mounted() {
-    this.fetchOrderStatus();
+    this.fetchOrderStatus()
   },
   methods: {
-    ...mapMutations("shared", ["setComponentStatus", "setCurrentComponent"]),
-    ...mapMutations("additional", ["addConfirmedOptions"]),
-    ...mapActions("total", ["fetchOrderStatus"]),
+    ...mapMutations('shared', ['setComponentStatus', 'setCurrentComponent']),
+    ...mapActions('total', ['fetchOrderStatus']),
     changeCurrentComponent(component) {
-      this.setCurrentComponent(component);
-    }
-  }
-};
+      this.setCurrentComponent(component)
+    },
+  },
+}
 </script>
 
 <style scoped lang="scss">
@@ -154,7 +149,7 @@ export default {
   margin-right: 16px;
   height: 8px;
   width: 6px;
-  background: url("~@/assets/order_arrow.svg");
+  background: url('~@/assets/order_arrow.svg');
 }
 .order__order__number {
   font-weight: bold;
