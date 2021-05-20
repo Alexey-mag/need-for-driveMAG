@@ -39,10 +39,10 @@ export default {
   line-height: 21px !important;
 }
 .el-dialog {
-  margin-top: 40vh !important;
   border: none !important;
   box-shadow: none !important;
   background: #ffffff !important;
+  margin-top: 35vh !important;
 }
 .el-dialog__wrapper {
   background: rgba(255, 255, 255, 0.9) !important;

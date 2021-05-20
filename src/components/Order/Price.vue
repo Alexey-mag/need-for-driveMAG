@@ -117,15 +117,14 @@ export default {
     },
   },
   methods: {
-    ...mapMutations('shared', ['toNextStep']),
+    ...mapMutations('shared', ['toNextStep', 'invertPriceVisible']),
     ...mapActions('total', ['clearConfirmedOrder']),
     toNextComp() {
       this.toNextStep()
-      // this.$store.dispatch("shared/toNextStep");
+      this.invertPriceVisible();
     },
     reset() {
       this.clearConfirmedOrder()
-      // this.$store.dispatch("total/clearConfirmedOrder");
     },
   },
 }
@@ -216,5 +215,10 @@ export default {
 }
 .price__total_error {
   color: rgba(255, 7, 5, 0.65);
+}
+
+// --------------------------------1023------------------------------------
+@media screen and (max-width: $tablet) {
+
 }
 </style>
