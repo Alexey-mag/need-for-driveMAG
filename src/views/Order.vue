@@ -178,11 +178,6 @@ export default {
   }
 }
 
-// --------------------------------1340------------------------------------
-@media screen and (max-width: $desktop-min) {
-
-}
-
 // --------------------------------1023------------------------------------
 @media screen and (max-width: $tablet) {
   .order__component_container {
