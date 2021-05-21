@@ -106,6 +106,7 @@ export default {
   display: flex;
   flex-wrap: wrap;
   overflow: auto;
+  justify-content: center;
 }
 .model__loading {
   display: flex;
@@ -155,5 +156,15 @@ div::-webkit-scrollbar-track {
 div::-webkit-scrollbar-thumb {
   background-color: $main-gray;
   border-radius: 5px;
+}
+
+// --------------------------------1023------------------------------------
+@media screen and (max-width: $tablet) {
+  .model__container {
+    grid-area: 4 / 3 / 22 / 30;
+  }
+  .model__car_class_switch {
+    grid-area: 1 / 3 / 4 / 30;
+  }
 }
 </style>

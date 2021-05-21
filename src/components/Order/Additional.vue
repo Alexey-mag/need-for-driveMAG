@@ -53,7 +53,7 @@
       </div>
       <div class="additional__form_block">
         <p class="additional__label">Доп услуги</p>
-        <el-checkbox-group v-model="addOptions" class="additional__checkbox">
+        <el-checkbox-group v-model="addOptions" class="additional__checkbox" text-color="#ffffff">
           <el-checkbox
             v-for="opt in getOptions"
             :key="opt.name"

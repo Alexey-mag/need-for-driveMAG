@@ -112,4 +112,12 @@ export default {
   font-size: 24px;
   line-height: 28px;
 }
+// --------------------------------1023------------------------------------
+@media screen and (max-width: $tablet) {
+.total__container {
+  flex-flow: column;
+  align-items: center;
+  justify-content: center;
+}
+}
 </style>

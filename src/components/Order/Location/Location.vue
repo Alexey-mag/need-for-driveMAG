@@ -151,4 +151,21 @@ export default {
 .location__form_block {
   display: flex;
 }
+.inline-input {
+  width: 224px !important;
+  }
+
+// --------------------------------1340------------------------------------
+@media screen and (max-width: $desktop-min) {
+  .location__map {
+    grid-area: 6 / 3 / 17 / 31;
+  }
+}
+// --------------------------------1023------------------------------------
+@media screen and (max-width: $tablet) {
+
+  .location__map {
+    grid-area: 6 / 2 / 17 / 32;
+  }
+}
 </style>

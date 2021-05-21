@@ -58,8 +58,7 @@
       <button
         v-if="getConfirmedOrder"
         class="price__button price__button_cancel"
-        @click="reset"
-      >
+        @click="reset">
         Отменить
       </button>
       <button
@@ -67,8 +66,7 @@
         class="price__button"
         :class="buttonClass"
         :disabled="buttonActive"
-        @click="toNextComp"
-      >
+        @click="toNextComp">
         {{ currentComponent.buttonText }}
       </button>
       <dialog-app />
@@ -86,7 +84,7 @@ export default {
   computed: {
     ...mapGetters('order', ['getCity', 'getPoint', 'getPoints']),
     ...mapGetters('model', ['getCar']),
-    ...mapGetters('shared', ['currentComponent', 'orderComponents']),
+    ...mapGetters('shared', ['currentComponent', 'orderComponents', 'getWindowWidth', 'tablet']),
     ...mapGetters('additional', [
       'getRentDuration',
       'getRate',
@@ -117,15 +115,16 @@ export default {
     },
   },
   methods: {
-    ...mapMutations('shared', ['toNextStep']),
+    ...mapMutations('shared', ['toNextStep', 'invertPriceVisible']),
     ...mapActions('total', ['clearConfirmedOrder']),
     toNextComp() {
       this.toNextStep()
-      // this.$store.dispatch("shared/toNextStep");
+      if (this.getWindowWidth <= this.tablet) {
+        this.invertPriceVisible();
+      }
     },
     reset() {
       this.clearConfirmedOrder()
-      // this.$store.dispatch("total/clearConfirmedOrder");
     },
   },
 }

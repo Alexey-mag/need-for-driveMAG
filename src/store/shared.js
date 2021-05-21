@@ -6,7 +6,11 @@ export default {
     loading: false,
     isMapReady: false,
     isDialogVisible: false,
+    isPriceComponentVisible: false,
     windowWidth: null,
+    mobile: 568,
+    tablet: 1023,
+    desktopMin: 1340,
     slides: [
       {
         id: 1,
@@ -102,6 +106,18 @@ export default {
     currentComponent: null
   },
   getters: {
+    isPriceComponentVisible(state) {
+      return state.isPriceComponentVisible
+    },
+    mobile(state) {
+      return state.mobile
+    },
+    tablet(state) {
+      return state.tablet
+    },
+    desktopMin(state) {
+      return state.desktopMin
+    },
     orderComponents(state) {
       return state.orderComponents;
     },
@@ -133,6 +149,9 @@ export default {
     }
   },
   mutations: {
+    invertPriceVisible(state) {
+      state.isPriceComponentVisible = !state.isPriceComponentVisible
+    },
     setWindowWidth(state, payload) {
       state.windowWidth = payload
     },

@@ -39,7 +39,11 @@
           v-if="currentComponent.name === comp.name" />
       </keep-alive>
     </div>
-    <price />
+    <price v-show="getWindowWidth > tablet" />
+    <i v-if="getWindowWidth < tablet" @click="showPrice" class="el-icon-shopping-cart-1 order__button_price"/>
+    <el-dialog :show-close="false" :visible="isPriceComponentVisible">
+      <price />
+    </el-dialog>
   </div>
 </template>
 
@@ -56,7 +60,7 @@ export default {
   name: 'Order',
   components: { Price, Location, Additional, Model, Total, HeaderApp },
   computed: {
-    ...mapGetters('shared', ['orderComponents', 'currentComponent', 'getWindowWidth']),
+    ...mapGetters('shared', ['orderComponents', 'currentComponent', 'getWindowWidth','getWindowWidth', 'tablet', 'isPriceComponentVisible']),
     ...mapGetters('order', ['getLocationStatus']),
     ...mapGetters('model', ['getModelStatus']),
     ...mapGetters('additional', ['getAdditionalStatus']),
@@ -77,7 +81,10 @@ export default {
     this.fetchOrderStatus()
   },
   methods: {
-    ...mapMutations('shared', ['setComponentStatus', 'setCurrentComponent']),
+    showPrice() {
+      this.invertPriceVisible();
+    },
+    ...mapMutations('shared', ['setComponentStatus', 'setCurrentComponent', 'invertPriceVisible']),
     ...mapActions('total', ['fetchOrderStatus']),
     changeCurrentComponent(component) {
       this.setCurrentComponent(component)
@@ -89,6 +96,7 @@ export default {
 <style scoped lang="scss">
 .order {
   display: grid;
+  position: relative;
   grid-template-columns: repeat(43, 1fr);
   grid-template-rows: repeat(25, 1fr);
   grid-column-gap: 0;
@@ -113,9 +121,10 @@ export default {
   padding-left: calc(100% / 43 * 2);
 }
 .order__steps {
+  display: flex;
+  flex-wrap: wrap;
   height: 100%;
   list-style: none;
-  display: flex;
   align-items: center;
 }
 .order__step__container {
@@ -155,5 +164,31 @@ export default {
   font-weight: bold;
   font-size: 14px;
   line-height: 16px;
+}
+.order__button_price {
+  font-size: 45px;
+  position: absolute;
+  color: $main-black;
+  bottom: 30px;
+  right: 15px;
+  cursor: pointer;
+  z-index: 3000;
+  &:hover {
+    color: $main-green;
+  }
+}
+
+// --------------------------------1023------------------------------------
+@media screen and (max-width: $tablet) {
+  .order__component_container {
+    grid-area: 5 / 1 / 26 / 44;
+  }
+}
+
+// --------------------------------568------------------------------------
+@media screen and (max-width: $mobile) {
+  .order {
+    width: 100vw;
+  }
 }
 </style>
