@@ -36,7 +36,7 @@
 <script>
 import { mapGetters, mapActions, mapMutations } from "vuex";
 import Loader from "../Loader";
-import defaultCar from "@/assets/default-car.jpg";
+// import defaultCar from "@/assets/default-car.jpg";
 
 export default {
   name: "Model",
@@ -80,7 +80,7 @@ export default {
       this.setCar(car);
     },
     defaultImage(e) {
-      e.target.src = defaultCar;
+      e.target.src = "/images/default-car.jpg";
     }
   }
 };

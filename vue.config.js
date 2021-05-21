@@ -3,24 +3,24 @@ const path = require("path");
 module.exports = {
   publicPath:
     process.env.NODE_ENV === "production" ? "/need-for-driveMAG/" : "/",
-  configureWebpack: {
-    resolve: {
-      alias: {
-        "@": path.resolve(__dirname, "src/")
-      }
-    },
-    module: {
-      rules: [
-        {
-          test: /\.(|png|jpe?g|gif)$/i,
-          loader: "file-loader",
-          options: {
-            name: "[path][name].[ext]"
-          }
-        }
-      ]
-    }
-  },
+  // configureWebpack: {
+  //   resolve: {
+  //     alias: {
+  //       "@": path.resolve(__dirname, "src/")
+  //     }
+  //   },
+  //   module: {
+  //     rules: [
+  //       {
+  //         test: /\.(|png|jpe?g|gif)$/i,
+  //         loader: "file-loader",
+  //         options: {
+  //           name: "[path][name].[ext]"
+  //         }
+  //       }
+  //     ]
+  //   }
+  // },
   css: {
     requireModuleExtension: false,
     loaderOptions: {
@@ -33,7 +33,7 @@ module.exports = {
       }
     }
   },
-  assetsDir: "@/assets/",
+  // assetsDir: "@/assets/",
   devServer: process.env.NODE_ENV === "production" ? {} : proxy()
 };
 
