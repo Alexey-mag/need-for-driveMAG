@@ -41,9 +41,10 @@
     </div>
     <price v-show="getWindowWidth > tablet" />
     <i v-if="getWindowWidth < tablet" class="el-icon-shopping-cart-1 order__button_price" @click="showPrice"/>
-    <el-dialog :show-close="false" :visible="isPriceComponentVisible">
+    <el-drawer :show-close="false" :visible="isPriceComponentVisible" size="80%" :direction="'rtl'">
       <price />
-    </el-dialog>
+    </el-drawer>
+
   </div>
 </template>
 
@@ -122,7 +123,6 @@ export default {
 }
 .order__steps {
   display: flex;
-  flex-wrap: wrap;
   height: 100%;
   list-style: none;
   align-items: center;
@@ -170,7 +170,7 @@ export default {
   position: absolute;
   color: $main-black;
   bottom: 30px;
-  right: 15px;
+  right: 50px;
   cursor: pointer;
   z-index: 3000;
   &:hover {
@@ -187,8 +187,17 @@ export default {
 
 // --------------------------------568------------------------------------
 @media screen and (max-width: $mobile) {
+  .order__nav {
+    padding-left: 0;
+  }
   .order {
     width: 100vw;
+  }
+  .order__step {
+    margin-right: 3px;
+  }
+  .order__arrow {
+    margin-right: 3px;
   }
 }
 </style>

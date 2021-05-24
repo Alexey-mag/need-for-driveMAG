@@ -166,4 +166,10 @@ div::-webkit-scrollbar-thumb {
     grid-area: 1 / 3 / 4 / 30;
   }
 }
+// --------------------------------568------------------------------------
+@media screen and (max-width: $mobile) {
+  .model__car_card {
+    height: 180px;
+  }
+}
 </style>

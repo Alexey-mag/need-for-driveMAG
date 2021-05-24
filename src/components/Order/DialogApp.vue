@@ -14,20 +14,23 @@
 </template>
 
 <script>
-import { mapGetters } from "vuex";
+import { mapGetters, mapMutations } from "vuex";
 
 export default {
   name: "DialogApp",
   computed: {
-    ...mapGetters("shared", ["isDialogVisible"])
+    ...mapGetters("shared", ["isDialogVisible", ''])
   },
   methods: {
+    ...mapMutations('shared', ['invertPriceVisible']),
     close() {
       this.$store.dispatch("shared/setDialogStatus", false);
+      this.invertPriceVisible();
     },
     confirm() {
       this.$store.dispatch("total/pushOrder");
       this.$store.dispatch("shared/setDialogStatus", false);
+      this.invertPriceVisible();
     }
   }
 };

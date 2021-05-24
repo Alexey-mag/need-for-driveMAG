@@ -78,7 +78,7 @@ export default {
   grid-template-rows: repeat(21, 1fr);
 }
 .total__container {
-  grid-area: 2 / 3 / 8 / 26;
+  grid-area: 2 / 3 / 14 / 26;
   display: flex;
   justify-content: space-between;
 }

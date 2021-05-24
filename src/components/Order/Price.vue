@@ -84,7 +84,7 @@ export default {
   computed: {
     ...mapGetters('order', ['getCity', 'getPoint', 'getPoints']),
     ...mapGetters('model', ['getCar']),
-    ...mapGetters('shared', ['currentComponent', 'orderComponents', 'getWindowWidth', 'tablet']),
+    ...mapGetters('shared', ['currentComponent', 'orderComponents', 'getWindowWidth', 'tablet', 'isDialogVisible']),
     ...mapGetters('additional', [
       'getRentDuration',
       'getRate',
@@ -95,14 +95,14 @@ export default {
     ]),
     ...mapGetters('total', ['getConfirmedOrder']),
     buttonActive() {
-      if (this.currentComponent.id === 4) {
+      if (this.currentComponent.id === this.orderComponents.length) {
         return this.currentComponent.isDisabled
       } else {
         return this.orderComponents[this.currentComponent.id].isDisabled
       }
     },
     buttonClass() {
-      if (this.currentComponent.id === 4) {
+      if (this.currentComponent.id === this.orderComponents.length) {
         return {
           price__button_disabled: this.currentComponent.isDisabled,
         }
@@ -118,13 +118,14 @@ export default {
     ...mapMutations('shared', ['toNextStep', 'invertPriceVisible']),
     ...mapActions('total', ['clearConfirmedOrder']),
     toNextComp() {
-      this.toNextStep()
-      if (this.getWindowWidth <= this.tablet) {
+      if (this.getWindowWidth <= this.tablet && this.currentComponent.id !== this.orderComponents.length) {
         this.invertPriceVisible();
       }
+      this.toNextStep()
     },
     reset() {
       this.clearConfirmedOrder()
+      this.invertPriceVisible();
     },
   },
 }
