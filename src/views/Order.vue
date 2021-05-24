@@ -40,7 +40,7 @@
       </keep-alive>
     </div>
     <price v-show="getWindowWidth > tablet" />
-    <i v-if="getWindowWidth < tablet" @click="showPrice" class="el-icon-shopping-cart-1 order__button_price"/>
+    <i v-if="getWindowWidth < tablet" class="el-icon-shopping-cart-1 order__button_price" @click="showPrice"/>
     <el-dialog :show-close="false" :visible="isPriceComponentVisible">
       <price />
     </el-dialog>

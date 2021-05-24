@@ -15,8 +15,8 @@
           <b>Правый руль</b>
         </p>
         <p class="total__option">
-          <b>Доступна с </b
-          >{{ new Date(getConfirmedOrder.dateFrom).toLocaleString() }}
+          <b>Доступна с </b>
+          {{ new Date(getConfirmedOrder.dateFrom).toLocaleString() }}
         </p>
       </div>
       <img

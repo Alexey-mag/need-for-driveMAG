@@ -15,8 +15,7 @@
               v-show="city"
               slot="suffix"
               class="form__clear"
-              @click="clearIconCity"
-            >
+              @click="clearIconCity">
             </i>
           </el-autocomplete>
         </div>
@@ -33,8 +32,7 @@
               v-show="point"
               slot="suffix"
               class="form__clear"
-              @click="clearIconPoint"
-            >
+              @click="clearIconPoint">
             </i>
           </el-autocomplete>
         </div>

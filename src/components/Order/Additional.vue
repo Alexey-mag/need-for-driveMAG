@@ -59,8 +59,7 @@
             :key="opt.name"
             :label="opt.name"
             @change="setStoreOptions()"
-            >{{ optionCheckboxLabel(opt) }}</el-checkbox
-          >
+            >{{ optionCheckboxLabel(opt) }}</el-checkbox>
         </el-checkbox-group>
       </div>
     </div>

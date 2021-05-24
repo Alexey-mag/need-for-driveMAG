@@ -7,6 +7,15 @@ import Loader from "./components/Loader";
 import "./styles/theme/index.css";
 import locale from "element-ui/lib/locale/lang/ru-RU";
 import ElementUI from "element-ui";
+import Location from "@/components/Order/Location/Location";
+import Model from "@/components/Order/Model";
+import Additional from "@/components/Order/Additional";
+import Total from "@/components/Order/Total";
+
+Vue.component(Location)
+Vue.component(Model)
+Vue.component(Additional)
+Vue.component(Total)
 
 Vue.use(EasySlider);
 Vue.use(ElementUI, { locale });

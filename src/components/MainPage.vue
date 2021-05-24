@@ -12,7 +12,7 @@
         <p class="main__text_gray">
           Поминутная аренда авто твоего города
         </p>
-        <router-link class="main__button" to="/order/location">
+        <router-link class="main__button" to="/order">
           Забронировать
         </router-link>
       </main>
