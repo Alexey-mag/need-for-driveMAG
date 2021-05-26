@@ -161,7 +161,9 @@ export default {
 }
 // --------------------------------1023------------------------------------
 @media screen and (max-width: $tablet) {
-
+  .location {
+    grid-area: 1 / 1 / 22 / 45;
+  }
   .location__map {
     grid-area: 6 / 2 / 17 / 32;
   }

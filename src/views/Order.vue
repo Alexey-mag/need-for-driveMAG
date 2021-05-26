@@ -41,10 +41,11 @@
     </div>
     <price v-show="getWindowWidth > tablet" />
     <i v-if="getWindowWidth < tablet" class="el-icon-shopping-cart-1 order__button_price" @click="showPrice"/>
-    <el-drawer :show-close="false" :visible="isPriceComponentVisible" size="80%" :direction="'rtl'">
+    <el-dialog :show-close="false" :visible="isPriceComponentVisible">
       <price />
-    </el-drawer>
-
+    </el-dialog>
+    <dialog-app />
+    <button-next v-if="getWindowWidth < tablet && !isPriceComponentVisible" :button-view="'roundIcon'"/>
   </div>
 </template>
 
@@ -56,10 +57,12 @@ import Additional from '@/components/Order/Additional'
 import Total from '@/components/Order/Total'
 import HeaderApp from '@/components/HeaderApp'
 import { mapGetters, mapMutations, mapActions } from 'vuex'
+import ButtonNext from "@/components/Order/ButtonNext";
+import DialogApp from "@/components/Order/DialogApp";
 
 export default {
   name: 'Order',
-  components: { Price, Location, Additional, Model, Total, HeaderApp },
+  components: {DialogApp, ButtonNext, Price, Location, Additional, Model, Total, HeaderApp },
   computed: {
     ...mapGetters('shared', ['orderComponents', 'currentComponent', 'getWindowWidth','getWindowWidth', 'tablet', 'isPriceComponentVisible']),
     ...mapGetters('order', ['getLocationStatus']),
@@ -168,20 +171,18 @@ export default {
 .order__button_price {
   font-size: 45px;
   position: absolute;
-  color: $main-black;
-  bottom: 30px;
+  color: $main-green;
+  bottom: 25px;
   right: 50px;
   cursor: pointer;
   z-index: 3000;
-  &:hover {
-    color: $main-green;
-  }
 }
 
 // --------------------------------1023------------------------------------
 @media screen and (max-width: $tablet) {
   .order__component_container {
     grid-area: 5 / 1 / 26 / 44;
+    grid-template-columns: repeat(44, 1fr);
   }
 }
 

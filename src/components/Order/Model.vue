@@ -159,8 +159,11 @@ div::-webkit-scrollbar-thumb {
 
 // --------------------------------1023------------------------------------
 @media screen and (max-width: $tablet) {
+  .order__model {
+    grid-area: 1 / 1 / 22 / 45;
+  }
   .model__container {
-    grid-area: 4 / 3 / 22 / 30;
+    grid-area: 4 / 3 / 22 / 44;
   }
   .model__car_class_switch {
     grid-area: 1 / 3 / 4 / 30;

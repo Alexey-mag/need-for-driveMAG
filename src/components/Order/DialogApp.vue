@@ -19,18 +19,22 @@ import { mapGetters, mapMutations } from "vuex";
 export default {
   name: "DialogApp",
   computed: {
-    ...mapGetters("shared", ["isDialogVisible", ''])
+    ...mapGetters("shared", ["isDialogVisible", 'isPriceComponentVisible'])
   },
   methods: {
     ...mapMutations('shared', ['invertPriceVisible']),
     close() {
+      if (this.isPriceComponentVisible) {
+        this.invertPriceVisible();
+      }
       this.$store.dispatch("shared/setDialogStatus", false);
-      this.invertPriceVisible();
     },
     confirm() {
       this.$store.dispatch("total/pushOrder");
+      if (this.isPriceComponentVisible) {
+        this.invertPriceVisible();
+      }
       this.$store.dispatch("shared/setDialogStatus", false);
-      this.invertPriceVisible();
     }
   }
 };
