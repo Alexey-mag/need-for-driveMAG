@@ -38,7 +38,7 @@ export default {
       zoom: 12,
       markerIcon: {
         layout: "default#imageWithContent",
-        imageHref: "/images/map_marker.svg",
+        imageHref: require("@/assets/map_marker.svg"),
         imageSize: [18, 18],
         imageOffset: [0, 0]
       }
