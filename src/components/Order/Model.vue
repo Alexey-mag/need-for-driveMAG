@@ -42,7 +42,8 @@ export default {
   components: { Loader },
   data() {
     return {
-      radioSelected: ""
+      radioSelected: "",
+      imgDefPath: require('@/assets/default-car.jpg')
     };
   },
   computed: {
@@ -79,7 +80,7 @@ export default {
       this.setCar(car);
     },
     defaultImage(e) {
-      e.target.src = '/images/default-car.jpg';
+      e.target.src = this.imgDefPath;
     }
   }
 };

@@ -9,24 +9,18 @@ const routes = [
     path: "/order",
     name: "Order",
     component: Order,
-    meta: {
-      layout: "DefaultLayout"
-    },
   },
   {
     path: "/",
     name: "Home",
     component: Home,
-    meta: {
-      layout: "DefaultLayout"
-    }
   }
 ];
 
 const router = new VueRouter({
-  routes,
-  mode: "history",
-  base: process.env.BASE_URL
+  mode: "hash",
+  base: process.env.BASE_URL,
+  routes
 });
 
 export default router;

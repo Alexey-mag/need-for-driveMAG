@@ -4,7 +4,7 @@
       Need for drive
     </p>
     <div v-if="getCity" class="main__header__city">
-      <img class="header__img" src="/images/main_map.svg" alt="" />
+      <img class="header__img" :src="require('@/assets/main_map.svg')" alt="" />
       <p class="main__text_city">
         {{ getCity ? getCity.name : "" }}
       </p>

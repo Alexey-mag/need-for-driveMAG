@@ -1,7 +1,7 @@
 import Vue from "vue";
 import App from "./App.vue";
 import store from "./store";
-import router from "./router/index";
+import router from "./router";
 import EasySlider from "vue-easy-slider";
 import Loader from "./components/Loader";
 import "./styles/theme/index.css";

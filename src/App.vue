@@ -1,17 +1,18 @@
 <template>
   <div class="app">
-    <component :is="layout" />
+    <menu-app />
+    <router-view />
   </div>
 </template>
 
 <script>
-import DefaultLayout from "@/layouts/DefaultLayout";
+import MenuApp from './components/MenuApp';
 import { mapActions, mapMutations } from "vuex";
 
 export default {
   name: "App",
   components: {
-    DefaultLayout
+    MenuApp
   },
   data() {
     return {
@@ -36,5 +37,7 @@ export default {
 
 <style lang="scss">
 .app {
+  display: flex;
+  height: 100vh;
 }
 </style>
