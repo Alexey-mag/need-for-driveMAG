@@ -55,36 +55,21 @@
           <b>Цена:</b> от{{ getCar.priceMin }} до {{ getCar.priceMax }} ₽
         </div>
       </div>
-      <button
-        v-if="getConfirmedOrder"
-        class="price__button price__button_cancel"
-        @click="reset">
-        Отменить
-      </button>
-      <button
-        v-else
-        class="price__button"
-        :class="buttonClass"
-        :disabled="buttonActive"
-        @click="toNextComp">
-        {{ currentComponent.buttonText }}
-      </button>
-      <dialog-app />
+      <button-next :button-view="'withText'" />
     </div>
   </div>
 </template>
 
 <script>
-import { mapGetters, mapMutations, mapActions } from 'vuex'
-import DialogApp from '@/components/Order/DialogApp'
+import { mapGetters } from 'vuex'
+import ButtonNext from "@/components/Order/ButtonNext";
 
 export default {
   name: 'Price',
-  components: { DialogApp },
+  components: { ButtonNext },
   computed: {
     ...mapGetters('order', ['getCity', 'getPoint', 'getPoints']),
     ...mapGetters('model', ['getCar']),
-    ...mapGetters('shared', ['currentComponent', 'orderComponents', 'getWindowWidth', 'tablet']),
     ...mapGetters('additional', [
       'getRentDuration',
       'getRate',
@@ -93,40 +78,7 @@ export default {
       'getColor',
       'isPriceValid',
     ]),
-    ...mapGetters('total', ['getConfirmedOrder']),
-    buttonActive() {
-      if (this.currentComponent.id === 4) {
-        return this.currentComponent.isDisabled
-      } else {
-        return this.orderComponents[this.currentComponent.id].isDisabled
-      }
-    },
-    buttonClass() {
-      if (this.currentComponent.id === 4) {
-        return {
-          price__button_disabled: this.currentComponent.isDisabled,
-        }
-      } else {
-        return {
-          price__button_disabled: this.orderComponents[this.currentComponent.id]
-            .isDisabled,
-        }
-      }
-    },
-  },
-  methods: {
-    ...mapMutations('shared', ['toNextStep', 'invertPriceVisible']),
-    ...mapActions('total', ['clearConfirmedOrder']),
-    toNextComp() {
-      this.toNextStep()
-      if (this.getWindowWidth <= this.tablet) {
-        this.invertPriceVisible();
-      }
-    },
-    reset() {
-      this.clearConfirmedOrder()
-    },
-  },
+  }
 }
 </script>
 

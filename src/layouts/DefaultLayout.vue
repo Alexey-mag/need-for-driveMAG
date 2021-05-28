@@ -1,7 +1,7 @@
 <template>
   <div class="default__layout">
     <menu-app />
-    <router-view :layout.sync="layout" />
+    <router-view :layout="layout" />
   </div>
 </template>
 

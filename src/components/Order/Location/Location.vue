@@ -15,8 +15,7 @@
               v-show="city"
               slot="suffix"
               class="form__clear"
-              @click="clearIconCity"
-            >
+              @click="clearIconCity">
             </i>
           </el-autocomplete>
         </div>
@@ -33,8 +32,7 @@
               v-show="point"
               slot="suffix"
               class="form__clear"
-              @click="clearIconPoint"
-            >
+              @click="clearIconPoint">
             </i>
           </el-autocomplete>
         </div>
@@ -163,7 +161,9 @@ export default {
 }
 // --------------------------------1023------------------------------------
 @media screen and (max-width: $tablet) {
-
+  .location {
+    grid-area: 1 / 1 / 22 / 45;
+  }
   .location__map {
     grid-area: 6 / 2 / 17 / 32;
   }

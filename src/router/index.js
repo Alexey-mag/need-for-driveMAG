@@ -1,22 +1,10 @@
 import Vue from "vue";
 import VueRouter from "vue-router";
-import Home from "../views/Home";
-import Order from "../views/Order";
-import Location from "../components/Order/Location/Location";
-import Model from "../components/Order/Model";
-import Additional from "../components/Order/Additional";
-import Total from "../components/Order/Total";
+import Home from "@/views/Home";
+import Order from "@/views/Order";
 
 Vue.use(VueRouter);
 const routes = [
-  {
-    path: "/",
-    name: "Home",
-    component: Home,
-    meta: {
-      layout: "DefaultLayout"
-    }
-  },
   {
     path: "/order",
     name: "Order",
@@ -24,40 +12,14 @@ const routes = [
     meta: {
       layout: "DefaultLayout"
     },
-    children: [
-      {
-        path: "location",
-        name: "Location",
-        component: Location,
-        meta: {
-          layout: "DefaultLayout"
-        }
-      },
-      {
-        path: "model",
-        name: "Model",
-        component: Model,
-        meta: {
-          layout: "DefaultLayout"
-        }
-      },
-      {
-        path: "additional",
-        name: "Additional",
-        component: Additional,
-        meta: {
-          layout: "DefaultLayout"
-        }
-      },
-      {
-        path: "total",
-        name: "Total",
-        component: Total,
-        meta: {
-          layout: "DefaultLayout"
-        }
-      }
-    ]
+  },
+  {
+    path: "/",
+    name: "Home",
+    component: Home,
+    meta: {
+      layout: "DefaultLayout"
+    }
   }
 ];
 
