@@ -132,8 +132,8 @@ export default {
   font-size: 45px;
   position: absolute;
   color: $main-green;
-  bottom: 80px;
-  right: 50px;
+  bottom: 25px;
+  right: 105px;
   cursor: pointer !important;
   z-index: 3000;
   background-color: Transparent !important;

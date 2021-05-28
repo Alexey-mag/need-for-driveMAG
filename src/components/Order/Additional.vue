@@ -276,4 +276,12 @@ export default {
   display: flex;
   flex-direction: column;
 }
+// --------------------------------568------------------------------------
+@media screen and (max-width: $mobile) {
+  .el-picker-panel {
+    position: absolute;
+    top: 20% !important;
+    left: 5% !important;
+}
+}
 </style>
